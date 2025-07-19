@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.librarylighthouse.UI.Auth.LoginActivity;
+import com.example.librarylighthouse.ui.Auth.LoginActivity;
 
 public class TestActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;

@@ -5,10 +5,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.librarylighthouse.UI.Home.HomeFragment;
-import com.example.librarylighthouse.UI.Home.LibraryFragment;
-import com.example.librarylighthouse.UI.Home.ListFragment;
-import com.example.librarylighthouse.UI.Home.ProfileFragment;
+import com.example.librarylighthouse.ui.Home.HomeFragment;
+import com.example.librarylighthouse.ui.Home.LibraryFragment;
+import com.example.librarylighthouse.ui.Home.ListFragment;
+import com.example.librarylighthouse.ui.Home.ProfileFragment;
 import com.example.librarylighthouse.databinding.ActivityMainBinding;
 
 

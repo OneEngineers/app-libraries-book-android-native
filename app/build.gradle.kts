@@ -66,5 +66,4 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.apollo.runtime)
     implementation(libs.hilt.android)
-    annotationProcessor(libs.dagger.compiler)
 }
