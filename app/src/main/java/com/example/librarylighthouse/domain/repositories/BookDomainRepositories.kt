@@ -1,6 +1,6 @@
 package com.example.librarylighthouse.domain.repositories
 
-import src.main.graphql.BooksQuery
+import com.example.librarylighthouse.graphql.BooksQuery
 
 interface BookDomainRepositories {
     suspend fun getQueryBook(): Result<BooksQuery.Book>
