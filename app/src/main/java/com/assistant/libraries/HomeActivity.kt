@@ -8,26 +8,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
-class ScreenA : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class HomeActivity: ComponentActivity() {
+    override  fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                Greeting()
+                Hello()
             }
-        }
+    }
     }
 }
-
 @Composable
-fun Greeting() {
-    Text(text = "Hello, Library Lighthouse!")
+fun Hello() {
+    Text(text = "Hello")
 }
-
 @Preview(showBackground = true)
 @Composable
-fun PreviewGreeting() {
+fun PreviewHello() {
     MaterialTheme {
-        Greeting()
+        Hello()
     }
 }
