@@ -19,7 +19,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - your-email@example.com
+          - your-email@assistant.com
         notify:
           success: true
           failure: true

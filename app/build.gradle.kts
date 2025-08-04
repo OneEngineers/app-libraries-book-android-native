@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.librarylighthouse"
+    namespace = "com.assistant.libraries"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.librarylighthouse"
+        applicationId = "com.assistant.libraries"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -48,11 +48,11 @@ android {
 }
 
 apollo {
-    service("librarylighthouse") {
-        packageName.set("com.example.librarylighthouse.graphql")
+    service("libraries") {
+        packageName.set("com.assistant.libraries.graphql")
         introspection {
             endpointUrl.set("http://localhost:84/graphql")
-            schemaFile.set(file("src/main/graphql/com/example/librarylighthouse/schema.graphqls"))
+            schemaFile.set(file("src/main/graphql/com/assistant/libraries/schema.graphqls"))
         }
     }
 }
