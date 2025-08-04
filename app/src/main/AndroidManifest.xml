@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="libraries">
+    package="com.assistant.libraries">
 
     <!-- Internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,9 +19,8 @@
         android:fullBackupContent="@xml/backup_rules"
         tools:targetApi="33">
 
-
         <activity
-            android:name="assistant.libraries.ScreenA"
+            android:name="com.assistant.libraries.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +28,5 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="assistant.libraries.MainActivity"
-            android:exported="false" />
     </application>
 </manifest>
