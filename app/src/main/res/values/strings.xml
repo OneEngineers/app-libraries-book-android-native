@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LibraryLighthouse</string>
+    <string name="app_name">OneAssistant</string>
     <string name="library_system">Library System</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
