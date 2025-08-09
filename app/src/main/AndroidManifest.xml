@@ -20,7 +20,7 @@
         tools:targetApi="33">
 
         <activity
-            android:name="com.assistant.libraries.HomeActivity"
+            android:name="com.assistant.libraries.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

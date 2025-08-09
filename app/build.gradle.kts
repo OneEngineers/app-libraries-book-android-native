@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.compose") // ✅ required for Kotlin 2.0 + Compose
-    id("com.apollographql.apollo") version "4.2.0"
+    id("com.apollographql.apollo") version "4.3.2"
 }
 
 android {
@@ -50,24 +50,20 @@ android {
 apollo {
     service("libraries") {
         packageName.set("com.assistant.libraries.graphql")
-        introspection {
-            endpointUrl.set("http://localhost:84/graphql")
-            schemaFile.set(file("src/main/graphql/com/assistant/libraries/schema.graphqls"))
-        }
     }
 }
 
 dependencies {
     // Compose BOM (optional but cleaner)
-    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
+    implementation(libs.compose.bom)
 
     // Jetpack Compose
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.activity.compose)
+    implementation(libs.ui)
+    implementation(libs.material3)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
     // UI & support libraries
     implementation(libs.appcompat)
