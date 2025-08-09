@@ -1,4 +1,4 @@
-package com.assistant.libraries
+package com.assistant.libraries.utilities
 
 import com.apollographql.apollo.ApolloClient
 
