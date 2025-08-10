@@ -20,7 +20,6 @@ class HomeActivity: ComponentActivity() {
 }
 @Composable
 fun Hello() {
-    Text(text = "Hello")
 }
 @Preview(showBackground = true)
 @Composable
