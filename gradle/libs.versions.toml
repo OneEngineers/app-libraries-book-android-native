@@ -1,6 +1,7 @@
 [versions]
 agp = "8.9.3"
-apolloRuntime = "4.2.0"
+apolloRuntime = "4.3.2"
+composeBom = "2025.07.00"
 converterGson = "2.9.0"
 daggerCompiler = "2.x"
 hiltAndroid = "2.42"
@@ -21,7 +22,9 @@ retrofit = "3.0.0"
 retrofitVersion = "2.9.0"
 
 [libraries]
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apolloRuntime" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -36,10 +39,15 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+material3 = { module = "androidx.compose.material3:material3" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson" }
+ui = { module = "androidx.compose.ui:ui" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
