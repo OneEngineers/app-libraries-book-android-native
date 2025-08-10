@@ -55,7 +55,7 @@ apollo {
 
 dependencies {
     // Compose BOM (optional but cleaner)
-    implementation(libs.compose.bom)
+    implementation(platform(libs.compose.bom))
 
     // Jetpack Compose
     implementation(libs.activity.compose)
