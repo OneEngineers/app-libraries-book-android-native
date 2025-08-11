@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.assistant.libraries.R
@@ -32,6 +33,7 @@ class MainScreen : ComponentActivity() {
     }
 }
 
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LibraryLighthouseScreen() {
     Column(
@@ -68,7 +70,7 @@ fun TopBarSection() {
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Library Lighthouse", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("One Assistant", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
         Row {
             IconButton(onClick = {}) {
