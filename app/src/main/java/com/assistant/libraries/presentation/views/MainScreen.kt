@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,52 +34,26 @@ class MainScreen : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LibraryLighthouseScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        TopBarSection()
-        SearchSection()
-        BannerSection()
-        CategorySection()
-        BookSection(title = "Books")
-        BookSection(title = "Report")
-        BookSection(title = "Audio")
-        Spacer(modifier = Modifier.weight(1f))
-        BottomNavBar()
-    }
-}
-
-@Composable
-fun TopBarSection() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id = R.drawable.borrowbook),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("One Assistant", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-        }
-        Row {
-            IconButton(onClick = {}) {
-                Icon(Icons.Default.Notifications, contentDescription = null)
-            }
-            IconButton(onClick = {}) {
-                Icon(Icons.Default.Person, contentDescription = null)
-            }
+    Scaffold(
+        bottomBar = { BottomNavBar() } // 👈 fixed bottom nav
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(innerPadding) // 👈 prevent content under nav bar
+        ) {
+            item { SearchSection() }
+            item { BannerSection() }
+            item { CategorySection() }
+            item { BookSection(title = "Books") }
+            item { BookSection(title = "Report") }
+            item { BookSection(title = "Audio") }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
@@ -111,7 +86,7 @@ fun SearchSection() {
 @Composable
 fun BannerSection() {
     Image(
-        painter = painterResource(id = R.drawable.book_cover),
+        painter = painterResource(id = R.drawable.images),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -139,8 +114,9 @@ fun CategoryItem(name: String, icon: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = name,
-            modifier = Modifier.size(40.dp)
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(32.dp)
         )
         Text(name)
     }
