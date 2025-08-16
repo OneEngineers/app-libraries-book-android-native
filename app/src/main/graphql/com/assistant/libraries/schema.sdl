@@ -426,272 +426,6 @@ input JSONFilterInput {
   between: [JSON]
 }
 
-enum ENUM_BOOK_BOOK_STATUS {
-  available
-
-  unavailable
-}
-
-enum ENUM_BOOK_LANGUAGE {
-  Khmer
-
-  English
-
-  Thailand
-}
-
-input BookFiltersInput {
-  documentId: IDFilterInput
-
-  book_title: StringFilterInput
-
-  book_description: StringFilterInput
-
-  ISBN: StringFilterInput
-
-  page: StringFilterInput
-
-  year: DateFilterInput
-
-  book_categories: BookCategoryFiltersInput
-
-  publishers: PublisherFiltersInput
-
-  book_status: StringFilterInput
-
-  language: StringFilterInput
-
-  time_reading: StringFilterInput
-
-  createdAt: DateTimeFilterInput
-
-  updatedAt: DateTimeFilterInput
-
-  publishedAt: DateTimeFilterInput
-
-  and: [BookFiltersInput]
-
-  or: [BookFiltersInput]
-
-  not: BookFiltersInput
-}
-
-input BookInput {
-  book_title: String
-
-  book_cover: [ID]
-
-  book_description: String
-
-  ISBN: String
-
-  page: String
-
-  year: Date
-
-  book_categories: [ID]
-
-  publishers: [ID]
-
-  book_status: ENUM_BOOK_BOOK_STATUS
-
-  language: ENUM_BOOK_LANGUAGE
-
-  time_reading: String
-
-  publishedAt: DateTime
-}
-
-type Book {
-  documentId: ID!
-
-  book_title: String!
-
-  book_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): UploadFileRelationResponseCollection!
-
-  book_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): [UploadFile]!
-
-  book_description: String!
-
-  ISBN: String!
-
-  page: String!
-
-  year: Date!
-
-  book_categories_connection(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): BookCategoryRelationResponseCollection
-
-  book_categories(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): [BookCategory]!
-
-  publishers_connection(filters: PublisherFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): PublisherRelationResponseCollection
-
-  publishers(filters: PublisherFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): [Publisher]!
-
-  book_status: ENUM_BOOK_BOOK_STATUS
-
-  language: ENUM_BOOK_LANGUAGE
-
-  time_reading: String!
-
-  createdAt: DateTime
-
-  updatedAt: DateTime
-
-  publishedAt: DateTime
-}
-
-type BookEntityResponseCollection {
-  nodes: [Book!]!
-
-  pageInfo: Pagination!
-}
-
-input BookCategoryFiltersInput {
-  documentId: IDFilterInput
-
-  category_name: StringFilterInput
-
-  book: BookFiltersInput
-
-  createdAt: DateTimeFilterInput
-
-  updatedAt: DateTimeFilterInput
-
-  publishedAt: DateTimeFilterInput
-
-  and: [BookCategoryFiltersInput]
-
-  or: [BookCategoryFiltersInput]
-
-  not: BookCategoryFiltersInput
-}
-
-input BookCategoryInput {
-  category_name: String
-
-  book: ID
-
-  category_cover: [ID]
-
-  publishedAt: DateTime
-}
-
-type BookCategory {
-  documentId: ID!
-
-  category_name: String!
-
-  book: Book
-
-  category_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): UploadFileRelationResponseCollection!
-
-  category_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): [UploadFile]!
-
-  createdAt: DateTime
-
-  updatedAt: DateTime
-
-  publishedAt: DateTime
-}
-
-type BookCategoryEntityResponseCollection {
-  nodes: [BookCategory!]!
-
-  pageInfo: Pagination!
-}
-
-type BookCategoryRelationResponseCollection {
-  nodes: [BookCategory!]!
-}
-
-input PublisherFiltersInput {
-  documentId: IDFilterInput
-
-  publisher_name: StringFilterInput
-
-  book: BookFiltersInput
-
-  createdAt: DateTimeFilterInput
-
-  updatedAt: DateTimeFilterInput
-
-  publishedAt: DateTimeFilterInput
-
-  and: [PublisherFiltersInput]
-
-  or: [PublisherFiltersInput]
-
-  not: PublisherFiltersInput
-}
-
-input PublisherInput {
-  publisher_name: String
-
-  book: ID
-
-  publisher_cover: [ID]
-
-  publishedAt: DateTime
-}
-
-type Publisher {
-  documentId: ID!
-
-  publisher_name: String!
-
-  book: Book
-
-  publisher_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): UploadFileRelationResponseCollection!
-
-  publisher_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = []): [UploadFile]!
-
-  createdAt: DateTime
-
-  updatedAt: DateTime
-
-  publishedAt: DateTime
-}
-
-type PublisherEntityResponseCollection {
-  nodes: [Publisher!]!
-
-  pageInfo: Pagination!
-}
-
-type PublisherRelationResponseCollection {
-  nodes: [Publisher!]!
-}
-
 input UploadFileFiltersInput {
   documentId: IDFilterInput
 
@@ -1154,7 +888,419 @@ type UsersPermissionsUserRelationResponseCollection {
   nodes: [UsersPermissionsUser!]!
 }
 
-union GenericMorph = Book|BookCategory|Publisher|UploadFile|I18NLocale|ReviewWorkflowsWorkflow|ReviewWorkflowsWorkflowStage|UsersPermissionsPermission|UsersPermissionsRole|UsersPermissionsUser
+enum ENUM_BOOK_BOOK_STATUS {
+  available
+
+  unavailable
+}
+
+enum ENUM_BOOK_LANGUAGE {
+  Khmer
+
+  English
+
+  Thailand
+}
+
+input BookFiltersInput {
+  documentId: IDFilterInput
+
+  book_title: StringFilterInput
+
+  book_description: StringFilterInput
+
+  ISBN: StringFilterInput
+
+  page: StringFilterInput
+
+  year: DateFilterInput
+
+  book_categories: BookCategoryFiltersInput
+
+  publishers: PublisherFiltersInput
+
+  book_status: StringFilterInput
+
+  language: StringFilterInput
+
+  time_reading: StringFilterInput
+
+  sub_categories: SubCategoryFiltersInput
+
+  createdAt: DateTimeFilterInput
+
+  updatedAt: DateTimeFilterInput
+
+  publishedAt: DateTimeFilterInput
+
+  and: [BookFiltersInput]
+
+  or: [BookFiltersInput]
+
+  not: BookFiltersInput
+}
+
+input BookInput {
+  book_title: String
+
+  book_cover: [ID]
+
+  book_description: String
+
+  ISBN: String
+
+  page: String
+
+  year: Date
+
+  book_categories: [ID]
+
+  publishers: [ID]
+
+  book_status: ENUM_BOOK_BOOK_STATUS
+
+  language: ENUM_BOOK_LANGUAGE
+
+  time_reading: String
+
+  sub_categories: [ID]
+
+  publishedAt: DateTime
+}
+
+type Book {
+  documentId: ID!
+
+  book_title: String!
+
+  book_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): UploadFileRelationResponseCollection!
+
+  book_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [UploadFile]!
+
+  book_description: String!
+
+  ISBN: String!
+
+  page: String!
+
+  year: Date!
+
+  book_categories_connection(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): BookCategoryRelationResponseCollection
+
+  book_categories(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [BookCategory]!
+
+  publishers_connection(filters: PublisherFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): PublisherRelationResponseCollection
+
+  publishers(filters: PublisherFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [Publisher]!
+
+  book_status: ENUM_BOOK_BOOK_STATUS
+
+  language: ENUM_BOOK_LANGUAGE
+
+  time_reading: String!
+
+  sub_categories_connection(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): SubCategoryRelationResponseCollection
+
+  sub_categories(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [SubCategory]!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+
+  publishedAt: DateTime
+}
+
+type BookEntityResponseCollection {
+  nodes: [Book!]!
+
+  pageInfo: Pagination!
+}
+
+input BookCategoryFiltersInput {
+  documentId: IDFilterInput
+
+  category_name: StringFilterInput
+
+  book: BookFiltersInput
+
+  sub_categories: SubCategoryFiltersInput
+
+  createdAt: DateTimeFilterInput
+
+  updatedAt: DateTimeFilterInput
+
+  publishedAt: DateTimeFilterInput
+
+  and: [BookCategoryFiltersInput]
+
+  or: [BookCategoryFiltersInput]
+
+  not: BookCategoryFiltersInput
+}
+
+input BookCategoryInput {
+  category_name: String
+
+  book: ID
+
+  category_cover: [ID]
+
+  sub_categories: [ID]
+
+  publishedAt: DateTime
+}
+
+type BookCategory {
+  documentId: ID!
+
+  category_name: String!
+
+  book: Book
+
+  category_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): UploadFileRelationResponseCollection!
+
+  category_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [UploadFile]!
+
+  sub_categories_connection(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): SubCategoryRelationResponseCollection
+
+  sub_categories(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [SubCategory]!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+
+  publishedAt: DateTime
+}
+
+type BookCategoryEntityResponseCollection {
+  nodes: [BookCategory!]!
+
+  pageInfo: Pagination!
+}
+
+type BookCategoryRelationResponseCollection {
+  nodes: [BookCategory!]!
+}
+
+enum ENUM_NOTIFICATION_TYPE {
+  web
+
+  mobile
+}
+
+input NotificationFiltersInput {
+  documentId: IDFilterInput
+
+  title: StringFilterInput
+
+  content: StringFilterInput
+
+  type: StringFilterInput
+
+  createdAt: DateTimeFilterInput
+
+  updatedAt: DateTimeFilterInput
+
+  publishedAt: DateTimeFilterInput
+
+  and: [NotificationFiltersInput]
+
+  or: [NotificationFiltersInput]
+
+  not: NotificationFiltersInput
+}
+
+input NotificationInput {
+  title: String
+
+  content: String
+
+  type: ENUM_NOTIFICATION_TYPE
+
+  publishedAt: DateTime
+}
+
+type Notification {
+  documentId: ID!
+
+  title: String
+
+  content: String
+
+  type: ENUM_NOTIFICATION_TYPE
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+
+  publishedAt: DateTime
+}
+
+type NotificationEntityResponseCollection {
+  nodes: [Notification!]!
+
+  pageInfo: Pagination!
+}
+
+input PublisherFiltersInput {
+  documentId: IDFilterInput
+
+  publisher_name: StringFilterInput
+
+  book: BookFiltersInput
+
+  createdAt: DateTimeFilterInput
+
+  updatedAt: DateTimeFilterInput
+
+  publishedAt: DateTimeFilterInput
+
+  and: [PublisherFiltersInput]
+
+  or: [PublisherFiltersInput]
+
+  not: PublisherFiltersInput
+}
+
+input PublisherInput {
+  publisher_name: String
+
+  book: ID
+
+  publisher_cover: [ID]
+
+  publishedAt: DateTime
+}
+
+type Publisher {
+  documentId: ID!
+
+  publisher_name: String!
+
+  book: Book
+
+  publisher_cover_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): UploadFileRelationResponseCollection!
+
+  publisher_cover(filters: UploadFileFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = []): [UploadFile]!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+
+  publishedAt: DateTime
+}
+
+type PublisherEntityResponseCollection {
+  nodes: [Publisher!]!
+
+  pageInfo: Pagination!
+}
+
+type PublisherRelationResponseCollection {
+  nodes: [Publisher!]!
+}
+
+input SubCategoryFiltersInput {
+  documentId: IDFilterInput
+
+  title: StringFilterInput
+
+  book_category: BookCategoryFiltersInput
+
+  book: BookFiltersInput
+
+  createdAt: DateTimeFilterInput
+
+  updatedAt: DateTimeFilterInput
+
+  publishedAt: DateTimeFilterInput
+
+  and: [SubCategoryFiltersInput]
+
+  or: [SubCategoryFiltersInput]
+
+  not: SubCategoryFiltersInput
+}
+
+input SubCategoryInput {
+  title: String
+
+  book_category: ID
+
+  book: ID
+
+  publishedAt: DateTime
+}
+
+type SubCategory {
+  documentId: ID!
+
+  title: String!
+
+  book_category: BookCategory
+
+  book: Book
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+
+  publishedAt: DateTime
+}
+
+type SubCategoryEntityResponseCollection {
+  nodes: [SubCategory!]!
+
+  pageInfo: Pagination!
+}
+
+type SubCategoryRelationResponseCollection {
+  nodes: [SubCategory!]!
+}
+
+union GenericMorph = UploadFile|I18NLocale|ReviewWorkflowsWorkflow|ReviewWorkflowsWorkflowStage|UsersPermissionsPermission|UsersPermissionsRole|UsersPermissionsUser|Book|BookCategory|Notification|Publisher|SubCategory
 
 input FileInfoInput {
   name: String
@@ -1239,42 +1385,6 @@ input PaginationArg {
 }
 
 type Query {
-  book(documentId: ID!, status: PublicationStatus = PUBLISHED): Book
-
-  books_connection(filters: BookFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): BookEntityResponseCollection
-
-  books(filters: BookFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [Book]!
-
-  bookCategory(documentId: ID!, status: PublicationStatus = PUBLISHED): BookCategory
-
-  bookCategories_connection(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): BookCategoryEntityResponseCollection
-
-  bookCategories(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [BookCategory]!
-
-  publisher(documentId: ID!, status: PublicationStatus = PUBLISHED): Publisher
-
-  publishers_connection(filters: PublisherFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): PublisherEntityResponseCollection
-
-  publishers(filters: PublisherFiltersInput, pagination: PaginationArg = {
-
-  }
-  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [Publisher]!
-
   uploadFile(documentId: ID!, status: PublicationStatus = PUBLISHED): UploadFile
 
   uploadFiles_connection(filters: UploadFileFiltersInput, pagination: PaginationArg = {
@@ -1347,10 +1457,82 @@ type Query {
   }
   , sort: [String] = [], status: PublicationStatus = PUBLISHED): [UsersPermissionsUser]!
 
+  book(documentId: ID!, status: PublicationStatus = PUBLISHED): Book
+
+  books_connection(filters: BookFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): BookEntityResponseCollection
+
+  books(filters: BookFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [Book]!
+
+  bookCategory(documentId: ID!, status: PublicationStatus = PUBLISHED): BookCategory
+
+  bookCategories_connection(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): BookCategoryEntityResponseCollection
+
+  bookCategories(filters: BookCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [BookCategory]!
+
+  notification(documentId: ID!, status: PublicationStatus = PUBLISHED): Notification
+
+  notifications_connection(filters: NotificationFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): NotificationEntityResponseCollection
+
+  notifications(filters: NotificationFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [Notification]!
+
+  publisher(documentId: ID!, status: PublicationStatus = PUBLISHED): Publisher
+
+  publishers_connection(filters: PublisherFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): PublisherEntityResponseCollection
+
+  publishers(filters: PublisherFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [Publisher]!
+
+  subCategory(documentId: ID!, status: PublicationStatus = PUBLISHED): SubCategory
+
+  subCategories_connection(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): SubCategoryEntityResponseCollection
+
+  subCategories(filters: SubCategoryFiltersInput, pagination: PaginationArg = {
+
+  }
+  , sort: [String] = [], status: PublicationStatus = PUBLISHED): [SubCategory]!
+
   me: UsersPermissionsMe
 }
 
 type Mutation {
+  createReviewWorkflowsWorkflow(status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowInput!): ReviewWorkflowsWorkflow
+
+  updateReviewWorkflowsWorkflow(documentId: ID!, status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowInput!): ReviewWorkflowsWorkflow
+
+  deleteReviewWorkflowsWorkflow(documentId: ID!): DeleteMutationResponse
+
+  createReviewWorkflowsWorkflowStage(status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowStageInput!): ReviewWorkflowsWorkflowStage
+
+  updateReviewWorkflowsWorkflowStage(documentId: ID!, status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowStageInput!): ReviewWorkflowsWorkflowStage
+
+  deleteReviewWorkflowsWorkflowStage(documentId: ID!): DeleteMutationResponse
+
   createBook(status: PublicationStatus = PUBLISHED, data: BookInput!): Book
 
   updateBook(documentId: ID!, status: PublicationStatus = PUBLISHED, data: BookInput!): Book
@@ -1363,23 +1545,23 @@ type Mutation {
 
   deleteBookCategory(documentId: ID!): DeleteMutationResponse
 
+  createNotification(status: PublicationStatus = PUBLISHED, data: NotificationInput!): Notification
+
+  updateNotification(documentId: ID!, status: PublicationStatus = PUBLISHED, data: NotificationInput!): Notification
+
+  deleteNotification(documentId: ID!): DeleteMutationResponse
+
   createPublisher(status: PublicationStatus = PUBLISHED, data: PublisherInput!): Publisher
 
   updatePublisher(documentId: ID!, status: PublicationStatus = PUBLISHED, data: PublisherInput!): Publisher
 
   deletePublisher(documentId: ID!): DeleteMutationResponse
 
-  createReviewWorkflowsWorkflow(status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowInput!): ReviewWorkflowsWorkflow
+  createSubCategory(status: PublicationStatus = PUBLISHED, data: SubCategoryInput!): SubCategory
 
-  updateReviewWorkflowsWorkflow(documentId: ID!, status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowInput!): ReviewWorkflowsWorkflow
+  updateSubCategory(documentId: ID!, status: PublicationStatus = PUBLISHED, data: SubCategoryInput!): SubCategory
 
-  deleteReviewWorkflowsWorkflow(documentId: ID!): DeleteMutationResponse
-
-  createReviewWorkflowsWorkflowStage(status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowStageInput!): ReviewWorkflowsWorkflowStage
-
-  updateReviewWorkflowsWorkflowStage(documentId: ID!, status: PublicationStatus = PUBLISHED, data: ReviewWorkflowsWorkflowStageInput!): ReviewWorkflowsWorkflowStage
-
-  deleteReviewWorkflowsWorkflowStage(documentId: ID!): DeleteMutationResponse
+  deleteSubCategory(documentId: ID!): DeleteMutationResponse
 
   updateUploadFile(id: ID!, info: FileInfoInput): UploadFile!
 

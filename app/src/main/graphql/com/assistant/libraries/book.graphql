@@ -1,6 +1,20 @@
 query Books {
     books {
-        book_title
         ISBN
+        book_cover {
+            url
+        }
+        book_description
+        book_title
+        language
+        page
+        publishers {
+            publisher_name
+        }
+        time_reading
+        year
+        book_categories {
+            category_name
+        }
     }
 }
