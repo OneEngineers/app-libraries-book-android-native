@@ -1,0 +1,9 @@
+query Book($documentId: ID!) {
+    book(documentId: $documentId) {
+        documentId
+        book_title
+        page
+        language
+        year
+    }
+}

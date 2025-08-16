@@ -51,8 +51,12 @@ android {
 }
 
 apollo {
-    service("libraries") {
+    service("assistant") {
         packageName.set("com.assistant.libraries.graphql")
+        introspection {
+            endpointUrl.set("https://book-lms.itedev.online/graphql")
+            schemaFile.set(file("src/main/graphql/com/assistant/libraries/schema.sdl"))
+        }
     }
 }
 
