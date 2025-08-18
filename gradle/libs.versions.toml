@@ -4,6 +4,7 @@ apolloRuntime = "4.3.2"
 composeBom = "2025.07.00"
 converterGson = "2.9.0"
 daggerCompiler = "2.x"
+firebaseBom = "34.1.0"
 hiltAndroid = "2.42"
 hiltCompiler = "1.2.0"
 junit = "4.13.2"
@@ -27,6 +28,8 @@ apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.r
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
+firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }

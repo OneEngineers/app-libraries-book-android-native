@@ -64,6 +64,10 @@ dependencies {
     // Compose BOM (optional but cleaner)
     implementation(platform(libs.compose.bom))
 
+    // App check
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.appcheck.playintegrity)
+
     // Jetpack Compose
     implementation(libs.activity.compose)
     implementation(libs.ui)
