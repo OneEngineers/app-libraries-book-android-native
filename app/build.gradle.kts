@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.firebase.bom)
     implementation(libs.firebase.appcheck.playintegrity)
 
+
+
     // Jetpack Compose
     implementation(libs.activity.compose)
     implementation(libs.ui)
@@ -97,4 +99,26 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase BoM (manages versions)
+    implementation(platform(libs.firebase.bom))
+
+    // App Check Play Integrity (uses version from libs.versions.toml)
+    implementation(libs.firebase.appcheck.playintegrity)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0")) // BOM controls versions
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+
+    implementation("androidx.compose.material:material-icons-core:1.7.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.0")
+
+    implementation("androidx.navigation:navigation-compose:2.8.0") // use latest stable
+
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.compose.material3:material3:1.3.0")
+
+
 }
