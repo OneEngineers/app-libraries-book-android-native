@@ -24,24 +24,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.assistant.libraries.R
+import com.assistant.libraries.presentation.viewmodel.LoginViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                LoginScreen()
+                LoginScreen(
+                    onLoginSuccess = { /* Handle login success */ },
+                    onNavigateToRegister = { /* Handle navigation to register */ }
+                )
             }
         }
     }
 }
 
 @Composable
-fun LoginScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+fun LoginScreen(
+    onLoginSuccess: () -> Unit = {},
+    onNavigateToRegister: () -> Unit = {},
+    viewModel: LoginViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    // Handle login success
+    LaunchedEffect(uiState.isLoginSuccessful) {
+        if (uiState.isLoginSuccessful) {
+            onLoginSuccess()
+            viewModel.resetLoginState()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -97,50 +112,84 @@ fun LoginScreen() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value = uiState.email,
+                        onValueChange = viewModel::onEmailChange,
                         label = { Text("Email") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = uiState.errorMessage != null
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value = uiState.password,
+                        onValueChange = viewModel::onPasswordChange,
                         label = { Text("Password") },
                         modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            val image = if (uiState.isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            IconButton(onClick = viewModel::onPasswordVisibilityToggle) {
                                 Icon(image, contentDescription = "Toggle Password Visibility")
                             }
-                        }
+                        },
+                        isError = uiState.errorMessage != null
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(
-                        onClick = { /* Handle login */ },
+                        onClick = viewModel::login,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp),
                         shape = RoundedCornerShape(6.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF1A237E)
-                        )
+                        ),
+                        enabled = !uiState.isLoading
                     ) {
-                        Text("Login", color = Color.White)
+                        if (uiState.isLoading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = Color.White
+                            )
+                        } else {
+                            Text("Login", color = Color.White)
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
+
+                    // Error message
+                    uiState.errorMessage?.let { errorMessage ->
+                        Text(
+                            text = errorMessage,
+                            color = Color.Red,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
 
                     Text(
                         text = "Forgot Password ?",
                         color = Color.Gray,
                         fontSize = 14.sp,
                         modifier = Modifier.clickable { /* handle forgot password */ }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Navigate to Register
+                    Text(
+                        text = "Don't have an account? Sign Up",
+                        color = Color(0xFF1A237E),
+                        fontSize = 14.sp,
+                        modifier = Modifier.clickable { onNavigateToRegister() }
                     )
                 }
             }
@@ -152,6 +201,9 @@ fun LoginScreen() {
 @Composable
 fun LoginScreenPreview() {
     MaterialTheme {
-        LoginScreen()
+        LoginScreen(
+            onLoginSuccess = {},
+            onNavigateToRegister = {}
+        )
     }
 }

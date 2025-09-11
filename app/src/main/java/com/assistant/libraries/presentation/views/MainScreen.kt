@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,7 +37,11 @@ class MainScreen : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibraryLighthouseScreen() {
+fun LibraryLighthouseScreen(
+    onProfileClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
+    onBookClick: (String) -> Unit = {}
+) {
     var selectedIndex by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -58,7 +63,7 @@ fun LibraryLighthouseScreen() {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: Profile action */ }) {
+                    IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                     }
                 }
@@ -69,8 +74,13 @@ fun LibraryLighthouseScreen() {
         }
     ) { innerPadding ->
         when (selectedIndex) {
-            0 -> HomeScreen(modifier = Modifier.padding(innerPadding))
-            1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Search Screen") }
+            0 -> HomeScreen(
+                modifier = Modifier.padding(innerPadding),
+                onBookClick = onBookClick
+            )
+            1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { 
+                Text("Search Screen - Use top bar search or navigate to SearchScreen") 
+            }
             2 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Borrow Screen") }
             3 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Return Screen") }
             4 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Notifications") }
@@ -79,7 +89,10 @@ fun LibraryLighthouseScreen() {
 }
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onBookClick: (String) -> Unit = {}
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -87,9 +100,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     ) {
         item { BannerSection() }
         item { CategorySection() }
-        item { BookSection(title = "Books") }
-        item { BookSection(title = "Report") }
-        item { BookSection(title = "Audio") }
+        item { BookSection(title = "Books", onBookClick = onBookClick) }
+        item { BookSection(title = "Report", onBookClick = onBookClick) }
+        item { BookSection(title = "Audio", onBookClick = onBookClick) }
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
@@ -132,7 +145,10 @@ fun CategoryItem(name: String, icon: Int) {
 }
 
 @Composable
-fun BookSection(title: String) {
+fun BookSection(
+    title: String,
+    onBookClick: (String) -> Unit = {}
+) {
     Column {
         Row(
             modifier = Modifier
@@ -145,15 +161,26 @@ fun BookSection(title: String) {
             Text("See All", color = Color.White)
         }
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
-            items(6) { BookItem() }
+            items(6) { index -> 
+                BookItem(
+                    bookId = "book_$index",
+                    onBookClick = onBookClick
+                ) 
+            }
         }
     }
 }
 
 @Composable
-fun BookItem() {
+fun BookItem(
+    bookId: String = "book_1",
+    onBookClick: (String) -> Unit = {}
+) {
     Column(
-        modifier = Modifier.width(100.dp).padding(8.dp),
+        modifier = Modifier
+            .width(100.dp)
+            .padding(8.dp)
+            .clickable { onBookClick(bookId) },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(

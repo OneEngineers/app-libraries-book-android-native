@@ -5,7 +5,7 @@ composeBom = "2025.07.00"
 converterGson = "2.9.0"
 daggerCompiler = "2.x"
 firebaseBom = "34.1.0"
-hiltAndroid = "2.42"
+hiltAndroid = "2.48"
 hiltCompiler = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,12 +15,15 @@ material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 kotlin = "2.1.21"
+ksp = "2.1.21-1.0.25"
 coreKtx = "1.16.0"
 legacySupportV4 = "1.0.0"
 picasso = "2.71828"
 recyclerview = "1.4.0"
 retrofit = "3.0.0"
 retrofitVersion = "2.9.0"
+lifecycle = "2.8.7"
+viewmodel = "2.8.7"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -51,8 +54,11 @@ ui = { module = "androidx.compose.ui:ui" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
