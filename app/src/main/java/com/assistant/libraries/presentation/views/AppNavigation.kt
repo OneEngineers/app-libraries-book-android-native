@@ -4,6 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.assistant.libraries.presentation.views.auth.LoginScreen
+import com.assistant.libraries.presentation.views.auth.RegisterScreen
+import com.assistant.libraries.presentation.views.books.BookDetailsScreen
+import com.assistant.libraries.presentation.views.feature.SearchScreen
+import com.assistant.libraries.presentation.views.users.ProfileScreen
+import com.assistant.libraries.presentation.views.users.SettingsScreen
 
 @Composable
 fun MyAppNavigation() {
@@ -26,29 +32,29 @@ fun MyAppNavigation() {
 
         composable(Routes.LoginScreen) {
             LoginScreen(
-                onLoginSuccess = { 
+                onLoginSuccess = {
                     navController.navigate(Routes.MainScreen) {
                         popUpTo(Routes.HomeScreen) { inclusive = true }
                     }
                 },
-                onNavigateToRegister = { 
-                    navController.navigate(Routes.SignupScreen) 
+                onNavigateToRegister = {
+                    navController.navigate(Routes.SignupScreen)
                 }
             )
         }
 
         composable(Routes.SignupScreen) {
             RegisterScreen(
-                onRegisterSuccess = { 
+                onRegisterSuccess = {
                     navController.navigate(Routes.MainScreen) {
                         popUpTo(Routes.HomeScreen) { inclusive = true }
                     }
                 },
-                onNavigateToLogin = { 
-                    navController.navigate(Routes.LoginScreen) 
+                onNavigateToLogin = {
+                    navController.navigate(Routes.LoginScreen)
                 },
-                onBackClick = { 
-                    navController.popBackStack() 
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -66,7 +72,7 @@ fun MyAppNavigation() {
         composable(Routes.ProfileScreen) {
             ProfileScreen(
                 onBackClick = { navController.popBackStack() },
-                onLogoutClick = { 
+                onLogoutClick = {
                     navController.navigate(Routes.HomeScreen) {
                         popUpTo(Routes.HomeScreen) { inclusive = true }
                     }
@@ -84,7 +90,7 @@ fun MyAppNavigation() {
         composable(Routes.SearchScreen) {
             SearchScreen(
                 onBackClick = { navController.popBackStack() },
-                onBookClick = { bookId -> 
+                onBookClick = { bookId ->
                     navController.navigate("${Routes.BookDetailsScreen}/$bookId")
                 }
             )

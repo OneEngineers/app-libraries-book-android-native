@@ -1,4 +1,4 @@
-package com.assistant.libraries.presentation.views
+package com.assistant.libraries.presentation.views.auth
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.assistant.libraries.presentation.viewmodel.RegisterViewModel
 
 class RegisterActivity : ComponentActivity() {
@@ -47,7 +48,7 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
     onBackClick: () -> Unit = {},
-    viewModel: RegisterViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
