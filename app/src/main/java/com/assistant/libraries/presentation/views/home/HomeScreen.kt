@@ -1,4 +1,4 @@
-package com.assistant.libraries.presentation.views
+package com.assistant.libraries.presentation.views.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -53,12 +53,13 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(25.dp)
                 .align(Alignment.BottomCenter)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Welcome to Library LightHouse",
+                text = "Welcome to One Assistant",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = Color.White,
                     fontWeight = FontWeight.Bold
