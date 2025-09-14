@@ -1,4 +1,4 @@
-package com.assistant.libraries.presentation.views
+package com.assistant.libraries.presentation.views.books
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

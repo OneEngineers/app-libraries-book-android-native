@@ -1,9 +1,8 @@
-package com.assistant.libraries.presentation.views
+package com.assistant.libraries.presentation.views.auth
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -25,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.assistant.libraries.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.assistant.libraries.presentation.viewmodel.LoginViewModel
 
 class LoginActivity : ComponentActivity() {
@@ -46,7 +44,7 @@ class LoginActivity : ComponentActivity() {
 fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
     onNavigateToRegister: () -> Unit = {},
-    viewModel: LoginViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: LoginViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
@@ -75,11 +73,7 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.logo), // replace with your logo
-//                    contentDescription = "App Logo",
-//                    modifier = Modifier.size(48.dp)
-//                )
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Library Lighthouse",
