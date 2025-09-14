@@ -8,6 +8,7 @@ import com.assistant.libraries.presentation.views.auth.LoginScreen
 import com.assistant.libraries.presentation.views.auth.RegisterScreen
 import com.assistant.libraries.presentation.views.books.BookDetailsScreen
 import com.assistant.libraries.presentation.views.feature.SearchScreen
+import com.assistant.libraries.presentation.views.home.HomeScreen
 import com.assistant.libraries.presentation.views.users.ProfileScreen
 import com.assistant.libraries.presentation.views.users.SettingsScreen
 
@@ -21,11 +22,11 @@ fun MyAppNavigation() {
     ) {
         composable(Routes.HomeScreen) {
             HomeScreen(
-                onCreateAccountClick = { 
-                    navController.navigate(Routes.SignupScreen) 
+                onCreateAccountClick = {
+                    navController.navigate(Routes.SignupScreen)
                 },
-                onLoginClick = { 
-                    navController.navigate(Routes.LoginScreen) 
+                onLoginClick = {
+                    navController.navigate(Routes.LoginScreen)
                 }
             )
         }
