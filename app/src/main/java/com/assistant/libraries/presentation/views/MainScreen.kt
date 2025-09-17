@@ -1,5 +1,6 @@
 package com.assistant.libraries.presentation.views
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,9 +10,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -35,6 +35,7 @@ class MainScreen : ComponentActivity() {
     }
 }
 
+@SuppressLint("AutoboxingStateCreation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryLighthouseScreen(
@@ -42,7 +43,7 @@ fun LibraryLighthouseScreen(
     onSearchClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {}
 ) {
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
@@ -55,7 +56,7 @@ fun LibraryLighthouseScreen(
                             modifier = Modifier.size(40.dp).padding(end = 8.dp)
                         )
                         Text(
-                            text = "Library Lighthouse",
+                            text = "OneAssistant",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF0D1B2A)
@@ -63,6 +64,9 @@ fun LibraryLighthouseScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onSearchClick) {
+                        Icon(Icons.Default.Notifications, contentDescription = "Notification")
+                    }
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                     }
@@ -125,20 +129,31 @@ fun CategorySection() {
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        CategoryItem("Books", R.drawable.book_cover)
-        CategoryItem("Report", R.drawable.book_cover)
-        CategoryItem("Audio", R.drawable.book_cover)
+        LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
+            items(6) { index ->
+                CategoryItem("Books", R.drawable.book_cover)
+                CategoryItem("Report", R.drawable.book_cover)
+                CategoryItem("Audio", R.drawable.book_cover)
+                CategoryItem("Audio", R.drawable.book_cover)
+            }
+        }
+
     }
 }
-
+@Composable
+fun SearchScreen() {
+    Text("Search Screen")
+}
 @Composable
 fun CategoryItem(name: String, icon: Int) {
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            painter = painterResource(id = icon),
+        Image(
+            painter = painterResource(id = R.drawable.images),
             contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(60.dp).padding(bottom = 4.dp),
+            contentScale = ContentScale.Crop
+
         )
         Text(name)
     }
@@ -161,7 +176,7 @@ fun BookSection(
             Text("See All", color = Color.White)
         }
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
-            items(6) { index -> 
+            items(10) { index ->
                 BookItem(
                     bookId = "book_$index",
                     onBookClick = onBookClick
@@ -196,13 +211,13 @@ fun BookItem(
 
 @Composable
 fun BottomNavBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
-    val items = listOf("Home", "Search", "Borrow", "Return", "Notification")
+    val items = listOf("Home", "Podcast", "Library", "Category", "Mores")
     val icons = listOf(
         Icons.Default.Home,
-        Icons.Default.Search,
-        Icons.Default.Bookmark,
-        Icons.Default.Refresh,
-        Icons.Default.Notifications
+        Icons.Default.Podcasts,
+        Icons.AutoMirrored.Filled.LibraryBooks,
+        Icons.Default.Category,
+        Icons.Default.Apps
     )
 
     NavigationBar {
