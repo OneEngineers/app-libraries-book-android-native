@@ -6,12 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.assistant.libraries"
+    namespace = "com.ones.assistant"
+    //noinspection GradleDependency,OldTargetApi
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.assistant.libraries"
+        applicationId = "com.ones.assistant"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -51,11 +53,11 @@ android {
 }
 
 apollo {
-    service("assistant") {
-        packageName.set("com.assistant.libraries.graphql")
+    service("ones") {
+        packageName.set("com.ones.assistant.graphql")
         introspection {
             endpointUrl.set("https://book-lms.itedev.online/graphql")
-            schemaFile.set(file("src/main/graphql/com/assistant/libraries/schema.sdl"))
+            schemaFile.set(file("src/main/graphql/com/ones/assistant/schema.sdl"))
         }
     }
 }
@@ -75,10 +77,11 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.material3)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.ui)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    // UI & support libraries
+    // UI & support assistant
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

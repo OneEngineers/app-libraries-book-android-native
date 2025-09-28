@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OneAssistant"
+rootProject.name = "WeareOne"
 include(":app")
