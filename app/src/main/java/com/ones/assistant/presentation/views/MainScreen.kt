@@ -52,7 +52,7 @@ fun LibraryLighthouseScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            painter = painterResource(id = R.drawable.supper_app),
+                            painter = painterResource(id = R.drawable.logo_app),
                             contentDescription = "App Logo",
                             modifier = Modifier
                                 .size(40.dp)
