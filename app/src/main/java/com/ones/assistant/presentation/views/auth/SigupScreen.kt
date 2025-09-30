@@ -63,7 +63,7 @@ fun SignUpScreen() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo), // replace with your logo
+                    painter = painterResource(id = R.drawable.logo_app), // replace with your logo
                     contentDescription = "App Logo",
                     modifier = Modifier.size(40.dp)
                 )
