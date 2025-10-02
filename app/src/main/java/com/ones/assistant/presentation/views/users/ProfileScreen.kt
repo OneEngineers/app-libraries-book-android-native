@@ -90,7 +90,7 @@ fun ProfileScreen(
                 ) {
                     // Profile Image
                     Image(
-                        painter = painterResource(R.drawable.app_logo),
+                        painter = painterResource(R.drawable.logo_app),
                         contentDescription = "Profile Picture",
                         modifier = Modifier
                             .size(80.dp)

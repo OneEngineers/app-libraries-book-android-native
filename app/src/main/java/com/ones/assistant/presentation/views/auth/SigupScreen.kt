@@ -63,13 +63,13 @@ fun SignUpScreen() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo), // replace with your logo
+                    painter = painterResource(id = R.drawable.logo_app), // replace with your logo
                     contentDescription = "App Logo",
                     modifier = Modifier.size(40.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Library Lighthouse",
+                    text = "WeareOne",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
