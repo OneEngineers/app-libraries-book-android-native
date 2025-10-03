@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew :androidApp:testDebugUnitTest --no-daemon
+        run: ./gradlew app:testDebugUnitTest --no-daemon
 
   lint:
     name: Run Android Lint
@@ -56,7 +56,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run Android Lint
-        run: ./gradlew :androidApp:lintDebug --no-daemon
+        run: ./gradlew app:lintDebug --no-daemon
 
   build-aab:
     name: Build Android App Bundle (AAB)
@@ -82,13 +82,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build AAB
-        run: ./gradlew :androidApp:bundleDebug --no-daemon
+        run: ./gradlew app:bundleDebug --no-daemon
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: aab-artifact
-          path: androidApp/build/outputs/bundle/debug/*.aab
+          path: app/build/outputs/bundle/debug/*.aab
 
   build-apk:
     name: Build Android App (APK)
@@ -114,7 +114,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build APK
-        run: ./gradlew :androidApp:assembleDebug --no-daemon
+        run: ./gradlew app:assembleDebug --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
