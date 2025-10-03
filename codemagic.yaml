@@ -13,16 +13,16 @@ workflows:
     scripts:
       - name: Run unit tests
         script: |
-          ./gradlew :androidApp:testDebugUnitTest
+          ./gradlew app:testDebugUnitTest
       - name: Run Android Lint
         script: |
-          ./gradlew :androidApp:lintDebug
+          ./gradlew app:lintDebug
       - name: Build Android App Bundle (AAB)
         script: |
-          ./gradlew :androidApp:bundleDebug
+          ./gradlew app:bundleDebug
       - name: Build Android App (APK)
         script: |
-          ./gradlew :androidApp:assembleDebug
+          ./gradlew app:assembleDebug
     artifacts:
-      - androidApp/build/outputs/bundle/debug/*.aab
-      - androidApp/build/outputs/apk/debug/*.apk
+      - app/build/outputs/bundle/debug/*.aab
+      - app/build/outputs/apk/debug/*.apk
