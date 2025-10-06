@@ -25,6 +25,7 @@ retrofitVersion = "2.9.0"
 lifecycle = "2.8.7"
 viewmodel = "2.8.7"
 ui = "1.9.2"
+foundation = "1.6.8"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -58,6 +59,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
