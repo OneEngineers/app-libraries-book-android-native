@@ -61,7 +61,7 @@ fun MyAppNavigation() {
         }
 
         composable(Routes.MainScreen) {
-            LibraryLighthouseScreen(
+            WearOneHome(
                 onProfileClick = { navController.navigate(Routes.ProfileScreen) },
                 onSearchClick = { navController.navigate(Routes.SearchScreen) },
                 onBookClick = { bookId -> 

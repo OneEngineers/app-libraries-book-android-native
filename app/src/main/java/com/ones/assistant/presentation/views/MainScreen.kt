@@ -26,12 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.ones.assistant.ui.widgets.HomeCategoryScreen
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
+import kotlinx.coroutines.delay
 
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LibraryLighthouseScreen()
+            WearOneHome()
         }
     }
 }
@@ -39,7 +43,7 @@ class MainScreen : ComponentActivity() {
 @SuppressLint("AutoboxingStateCreation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibraryLighthouseScreen(
+fun WearOneHome(
     onProfileClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {}
@@ -108,21 +112,65 @@ fun HomeScreen(
         item { BannerSection() }
         item { HomeCategoryScreen() }
         item { BookSection(title = "Books", onBookClick = onBookClick) }
-        item { BookSection(title = "Audio", onBookClick = onBookClick) }
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun BannerSection() {
-    Image(
-        painter = painterResource(id = R.drawable.book_cover),
-        contentDescription = null,
+    val pagerState = rememberPagerState(pageCount = { 3 })
+    val bannerImages = listOf(
+        R.drawable.book_cover,
+        R.drawable.graphql,
+        R.drawable.bbgg
+    )
+
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000)
+            pagerState.animateScrollToPage((pagerState.currentPage + 1) % pagerState.pageCount)
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp),
-        contentScale = ContentScale.Crop
-    )
+            .height(150.dp)
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+        ) { page ->
+            Image(
+                painter = painterResource(id = bannerImages[page]),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Row(
+            Modifier
+                .height(20.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            horizontalArrangement = Arrangement.Center
+        ) {        repeat(pagerState.pageCount) { iteration ->
+            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .background(color, shape = androidx.compose.foundation.shape.CircleShape)
+                    .size(8.dp)
+            )
+        }
+        }
+    }
 }
 
 @Composable
@@ -131,16 +179,6 @@ fun BookSection(
     onBookClick: (String) -> Unit = {}
 ) {
     Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF1A237E))
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(title, color = Color.White, fontWeight = FontWeight.Bold)
-            Text("See All", color = Color.White)
-        }
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
             items(10) { index ->
                 BookItem(
@@ -202,6 +240,6 @@ fun BottomNavBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewLibraryLighthouse() {
-    LibraryLighthouseScreen()
+fun PreviewMainScreen() {
+    WearOneHome()
 }
