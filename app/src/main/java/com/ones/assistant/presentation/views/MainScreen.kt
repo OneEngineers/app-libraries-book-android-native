@@ -133,20 +133,43 @@ fun BannerSection() {
         }
     }
 
-    HorizontalPager(
-        state = pagerState,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
-    ) { page ->
-        Image(
-            painter = painterResource(id = bannerImages[page]),
-            contentDescription = null,
+    ) {
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
-            contentScale = ContentScale.Crop
-        )
+                .height(150.dp)
+        ) { page ->
+            Image(
+                painter = painterResource(id = bannerImages[page]),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Row(
+            Modifier
+                .height(20.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            horizontalArrangement = Arrangement.Center
+        ) {        repeat(pagerState.pageCount) { iteration ->
+            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .background(color, shape = androidx.compose.foundation.shape.CircleShape)
+                    .size(8.dp)
+            )
+        }
+        }
     }
 }
 
