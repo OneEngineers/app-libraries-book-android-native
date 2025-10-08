@@ -58,10 +58,10 @@ fun CategoryGrid() {
         CategoryData("Transport", R.drawable.podcasts_24px, "Promo"),
         CategoryData("Podcast", R.drawable.podcasts_24px, null),
         CategoryData("Library", R.drawable.library_books_24px, null),
-        CategoryData("Lab Panel", R.drawable.lab_panel_24px, null),
+//        CategoryData("Lab Panel", R.drawable.lab_panel_24px, null),
         CategoryData("Movie", R.drawable.movie_icon, null),
-        CategoryData("Nham24", R.drawable.podcasts_24px, "Fave"),
-        CategoryData("Ride later", R.drawable.podcasts_24px, null),
+//        CategoryData("Nham24", R.drawable.podcasts_24px, "Fave"),
+//        CategoryData("Ride later", R.drawable.podcasts_24px, null),
         CategoryData("All", R.drawable.podcasts_24px, null),
     )
 

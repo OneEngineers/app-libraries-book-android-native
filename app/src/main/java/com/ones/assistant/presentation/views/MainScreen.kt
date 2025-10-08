@@ -121,9 +121,9 @@ fun HomeScreen(
 fun BannerSection() {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val bannerImages = listOf(
-        R.drawable.book_cover,
-        R.drawable.graphql,
-        R.drawable.bbgg
+        R.drawable.images,
+        R.drawable.podcasts,
+        R.drawable.movies
     )
 
     LaunchedEffect(pagerState) {
