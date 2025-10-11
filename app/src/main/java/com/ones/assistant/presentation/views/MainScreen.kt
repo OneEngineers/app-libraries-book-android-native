@@ -72,7 +72,7 @@ fun WearOneHome(
                 },
                 actions = {
                     IconButton(onClick = onSearchClick) {
-                        Icon(Icons.Default.Notifications, contentDescription = "Notification")
+                        Icon(Icons.Default.Search, contentDescription = "Notification")
                     }
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profile")

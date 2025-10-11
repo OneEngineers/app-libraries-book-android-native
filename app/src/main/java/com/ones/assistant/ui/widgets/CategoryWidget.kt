@@ -69,7 +69,7 @@ fun CategoryGrid() {
         columns = GridCells.Fixed(4),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.height(200.dp)
+        modifier = Modifier.height(160.dp)
     ) {
         items(items) { item ->
             CategoryItem(
@@ -90,7 +90,7 @@ fun CategoryItem(
 ) {
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(14.dp))
             .background(Color(0xFFF5FAF8)) // light background like screenshot
             .padding(8.dp)
             .fillMaxWidth(),
@@ -101,7 +101,7 @@ fun CategoryItem(
                 painter = icon,
                 contentDescription = name,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(30.dp)
                     .align(Alignment.Center),
                 contentScale = ContentScale.Crop
             )
