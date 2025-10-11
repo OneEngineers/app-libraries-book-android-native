@@ -203,11 +203,11 @@ fun BookItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.book_cover),
+            painter = painterResource(id = R.drawable.images),
             contentDescription = null,
             modifier = Modifier
                 .height(140.dp)
-                .fillMaxWidth(),
+                .width(200.dp),
             contentScale = ContentScale.Crop
         )
         Text("Book Title", fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1)
@@ -217,11 +217,11 @@ fun BookItem(
 
 @Composable
 fun BottomNavBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
-    val items = listOf("Home", "Search", "Group", "Activity", "Mores")
+    val items = listOf("Home", "Content", "Transfer", "Activity", "Mores")
     val icons = listOf(
         Icons.Default.Home,
-        Icons.Default.Search,
-        Icons.Default.Groups,
+        Icons.Default.ContentCopy,
+        Icons.Default.Mediation,
         Icons.Default.MonitorHeart,
         Icons.Default.Apps
     )

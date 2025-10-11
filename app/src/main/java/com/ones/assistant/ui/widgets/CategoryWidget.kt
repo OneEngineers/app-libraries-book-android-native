@@ -62,10 +62,12 @@ fun CategoryGrid() {
         CategoryData("Movie", R.drawable.movie_icon, null),
 //        CategoryData("Nham24", R.drawable.podcasts_24px, "Fave"),
 //        CategoryData("Ride later", R.drawable.podcasts_24px, null),
-        CategoryData("All", R.drawable.podcasts_24px, null),
+        CategoryData("All", R.drawable.read_more_30dp, null),
     )
 
     LazyVerticalGrid(
+
+
         columns = GridCells.Fixed(4),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -91,7 +93,7 @@ fun CategoryItem(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
-            .background(Color(0xFFF5FAF8)) // light background like screenshot
+            //.background(Color(0xFFF5FAF8)) // light background like screenshot
             .padding(8.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
