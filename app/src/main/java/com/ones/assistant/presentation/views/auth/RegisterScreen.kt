@@ -51,7 +51,7 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
     // Handle registration success
     LaunchedEffect(uiState.isRegistrationSuccessful) {
         if (uiState.isRegistrationSuccessful) {
@@ -85,24 +85,25 @@ fun RegisterScreen(
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(370.dp)
-                    .padding(19.dp)
-            ) {
+//            Column(
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                modifier = Modifier
+//                    .width(370.dp)
+//                    .padding(19.dp)
+//            ) {
                 // Card container
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    border = ButtonDefaults.outlinedButtonBorder
-                ) {
+//                Card(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    shape = RoundedCornerShape(10.dp),
+//                    border = ButtonDefaults.outlinedButtonBorder
+//                ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
+
                     ) {
                         Text(
-                            text = "Join Library Lighthouse",
+                            text = "Join Weare One",
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = Color.Black,
@@ -152,7 +153,8 @@ fun RegisterScreen(
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             trailingIcon = {
-                                val image = if (uiState.isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                val image =
+                                    if (uiState.isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                                 IconButton(onClick = viewModel::onPasswordVisibilityToggle) {
                                     Icon(image, contentDescription = "Toggle Password Visibility")
                                 }
@@ -170,9 +172,13 @@ fun RegisterScreen(
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation = if (uiState.isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             trailingIcon = {
-                                val image = if (uiState.isConfirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                val image =
+                                    if (uiState.isConfirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                                 IconButton(onClick = viewModel::onConfirmPasswordVisibilityToggle) {
-                                    Icon(image, contentDescription = "Toggle Confirm Password Visibility")
+                                    Icon(
+                                        image,
+                                        contentDescription = "Toggle Confirm Password Visibility"
+                                    )
                                 }
                             },
                             isError = uiState.errorMessage != null
@@ -229,8 +235,9 @@ fun RegisterScreen(
                 }
             }
         }
-    }
-}
+//}
+//}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
