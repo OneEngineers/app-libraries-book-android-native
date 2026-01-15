@@ -1,0 +1,20 @@
+query BookLocal($documentId: ID!) {
+    bookLocal(documentId: $documentId) {
+        ISBN
+        book_cover {
+            url
+        }
+        categories {
+            title
+        }
+        description
+        page
+        language
+        title
+        publisher {
+            publisher_name
+        }
+        release
+        documentId
+    }
+}
