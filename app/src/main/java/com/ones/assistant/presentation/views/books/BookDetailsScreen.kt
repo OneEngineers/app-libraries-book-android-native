@@ -23,7 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.ones.assistant.R
+import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
 
 class BookDetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,30 +48,21 @@ class BookDetailsActivity : ComponentActivity() {
 @Composable
 fun BookDetailsScreen(
     bookId: String,
+    viewModel: BookDetailsViewModel = viewModel(),
     onBackClick: () -> Unit = {},
     onBorrowClick: () -> Unit = {},
     onWishlistClick: () -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     var isInWishlist by remember { mutableStateOf(false) }
     var isBorrowed by remember { mutableStateOf(false) }
     
-    // Mock book data
-    val book = BookDetails(
-        id = bookId,
-        title = "The Great Gatsby",
-        author = "F. Scott Fitzgerald",
-        description = "The Great Gatsby is a 1925 novel by American writer F. Scott Fitzgerald. Set in the Jazz Age on Long Island, the novel follows narrator Nick Carraway's interactions with mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy Buchanan.",
-        isbn = "978-0-7432-7356-5",
-        publishedYear = "1925",
-        pages = 180,
-        language = "English",
-        category = "Fiction",
-        rating = 4.2f,
-        totalRatings = 1250,
-        availableCopies = 3,
-        totalCopies = 5,
-        coverRes = R.drawable.book_cover
-    )
+    // Load book details when screen is displayed
+    LaunchedEffect(bookId) {
+        viewModel.loadBookDetail(bookId)
+    }
+    
+    val book = uiState.book
     
     Scaffold(
         topBar = {
@@ -97,12 +91,64 @@ fun BookDetailsScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF4F4F4))
-                .padding(innerPadding)
-        ) {
+        when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            uiState.errorMessage != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Error,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = uiState.errorMessage ?: "Unknown error",
+                            color = Color.Red,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = { viewModel.loadBookDetail(bookId) }) {
+                            Text("Retry")
+                        }
+                    }
+                }
+            }
+            book == null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Book not found", color = Color.Gray)
+                }
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFF4F4F4))
+                        .padding(innerPadding)
+                ) {
             // Book Cover and Basic Info
             item {
                 Card(
@@ -116,14 +162,27 @@ fun BookDetailsScreen(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
-                            painter = painterResource(id = book.coverRes),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(200.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
-                        )
+                        if (book.coverUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = book.coverUrl,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(id = R.drawable.book_cover),
+                                error = painterResource(id = R.drawable.book_cover)
+                            )
+                        } else if (book.coverRes != 0) {
+                            Image(
+                                painter = painterResource(id = book.coverRes),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                         
                         Spacer(modifier = Modifier.height(16.dp))
                         
@@ -189,10 +248,12 @@ fun BookDetailsScreen(
                         
                         BookInfoRow("ISBN", book.isbn)
                         BookInfoRow("Published", book.publishedYear)
-                        BookInfoRow("Pages", book.pages.toString())
-                        BookInfoRow("Language", book.language)
-                        BookInfoRow("Category", book.category)
-                        BookInfoRow("Available Copies", "${book.availableCopies}/${book.totalCopies}")
+                        BookInfoRow("Pages", if (book.pages > 0) book.pages.toString() else "N/A")
+                        BookInfoRow("Language", book.language.ifEmpty { "N/A" })
+                        BookInfoRow("Category", book.category.ifEmpty { "N/A" })
+                        if (book.rating > 0f) {
+                            BookInfoRow("Rating", "${book.rating} (${book.totalRatings} reviews)")
+                        }
                     }
                 }
             }
@@ -245,7 +306,7 @@ fun BookDetailsScreen(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (isBorrowed) Color.Gray else Color(0xFF1A237E)
                         ),
-                        enabled = book.availableCopies > 0 && !isBorrowed
+                        enabled = !isBorrowed
                     ) {
                         Icon(
                             if (isBorrowed) Icons.Default.Check else Icons.Default.Book,
@@ -283,6 +344,8 @@ fun BookDetailsScreen(
             }
             
             item { Spacer(modifier = Modifier.height(16.dp)) }
+                }
+            }
         }
     }
 }
@@ -328,7 +391,8 @@ data class BookDetails(
     val totalRatings: Int,
     val availableCopies: Int,
     val totalCopies: Int,
-    val coverRes: Int
+    val coverRes: Int = 0,
+    val coverUrl: String = ""
 )
 
 @Preview(showBackground = true, showSystemUi = true)

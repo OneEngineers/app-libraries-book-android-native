@@ -9,9 +9,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -27,9 +27,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.ones.assistant.ui.widgets.HomeCategoryScreen
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.delay
+import coil.compose.rememberAsyncImagePainter
+import com.ones.assistant.presentation.views.books.BookDetails
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ones.assistant.presentation.viewmodel.BooksListViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +53,14 @@ fun WearOneHome(
     onSearchClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {}
 ) {
+    val booksViewModel: BooksListViewModel = viewModel()
+    val uiState by booksViewModel.uiState.collectAsState()
+
+    // Load books when the screen is displayed
+    LaunchedEffect(Unit) {
+        booksViewModel.loadBooks()
+    }
+
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -87,6 +100,7 @@ fun WearOneHome(
         when (selectedIndex) {
             0 -> HomeScreen(
                 modifier = Modifier.padding(innerPadding),
+                books = uiState.books,
                 onBookClick = onBookClick
             )
             1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { 
@@ -102,6 +116,7 @@ fun WearOneHome(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    books: List<BookDetails> = emptyList(),
     onBookClick: (String) -> Unit = {}
 ) {
     LazyColumn(
@@ -111,7 +126,7 @@ fun HomeScreen(
     ) {
         item { BannerSection() }
         item { HomeCategoryScreen() }
-        item { BookSection(title = "Books", onBookClick = onBookClick) }
+        item { BookSection(books = books, onBookClick = onBookClick) }
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
@@ -175,16 +190,16 @@ fun BannerSection() {
 
 @Composable
 fun BookSection(
-    title: String,
+    books: List<BookDetails> = emptyList(),
     onBookClick: (String) -> Unit = {}
 ) {
     Column {
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
-            items(10) { index ->
+            items(items = books, key = { it.id }) { book ->
                 BookItem(
-                    bookId = "book_$index",
+                    book = book,
                     onBookClick = onBookClick
-                ) 
+                )
             }
         }
     }
@@ -192,26 +207,26 @@ fun BookSection(
 
 @Composable
 fun BookItem(
-    bookId: String = "book_1",
+    book: BookDetails,
     onBookClick: (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .width(100.dp)
             .padding(8.dp)
-            .clickable { onBookClick(bookId) },
+            .clickable { onBookClick(book.id) },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.images),
+            painter = rememberAsyncImagePainter(book.coverUrl),
             contentDescription = null,
             modifier = Modifier
                 .height(140.dp)
                 .width(200.dp),
             contentScale = ContentScale.Crop
         )
-        Text("Book Title", fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1)
-        Text("Author Name", fontSize = 10.sp, color = Color.Gray, maxLines = 1)
+        Text(book.title, fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1)
+        Text(book.author, fontSize = 10.sp, color = Color.Gray, maxLines = 1)
     }
 }
 

@@ -1,0 +1,3 @@
+# Placeholder to avoid Apollo error "But none of them contain type definitions."
+# The actual query is in books.graphql
+scalar dummy_type_to_satisfy_apollo

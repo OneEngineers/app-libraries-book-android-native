@@ -47,12 +47,16 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 
     lint {
         baseline = file("lint-baseline.xml")
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
     }
 }
 
@@ -73,8 +77,6 @@ dependencies {
     // App check
     implementation(libs.firebase.bom)
     implementation(libs.firebase.appcheck.playintegrity)
-
-
 
     // Jetpack Compose
     implementation(libs.activity.compose)
@@ -132,5 +134,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.foundation)
 
-
+    // Coil for image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
