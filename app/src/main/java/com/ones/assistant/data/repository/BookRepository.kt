@@ -1,13 +1,13 @@
 package com.ones.assistant.data.repository
 
-import com.ones.assistant.domain.repositories.BookRepo
+import com.ones.assistant.domain.repositories.book.BookRepositories;
 import com.ones.assistant.graphql.BookLocalQuery
 import com.ones.assistant.graphql.GetBooksQuery
 import com.ones.assistant.utilities.apolloClientBook
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class BookRepository : BookRepo {
+class BookRepository : BookRepositories {
 
     override suspend fun getBooks(): Result<GetBooksQuery.Data> {
         return withContext(Dispatchers.IO) {
