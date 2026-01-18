@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#A28D4F</color>
     <color name="menu_bar">#3DBFBD</color>
+    <color name="grey">#8e8e8e</color>
+    <color name="lightGrey">#dedede</color>
+    <color name="blue">#4272f4</color>
 </resources>

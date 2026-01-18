@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OneAssistant</string>
+    <string name="app_name">WeareOne</string>
     <string name="library_system">Library System</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
@@ -9,24 +9,10 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">SIGN IN</string>
-    <string name="alredy_have_an_account">Alredy have an Account ?</string>
+    <string name="already_have_an_account">Already have an Account ?</string>
     <string name="sign_up">Sign up</string>
     <string name="search" />
     <string name="home" />
     <string name="account_user" />
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="may_10_2023_may_24_2023">May 10, 2023 May 24, 2023</string>
-    <string name="overdue">⚠ Overdue</string>
-    <string name="new_arrivals">New Arrivals</string>
-    <string name="see_all">See All</string>
-    <string name="just_in_time_for_summer">Just in time for summer!</string>
-    <string name="book_title">Book Title</string>
-    <string name="librarylighthouse">LibraryLighthouse</string>
-    <string name="thriller">Thriller</string>
-    <string name="get_otp">Get OTP</string>
-    <string name="create_your_account">Create Your Account</string>
-    <string name="name">Name</string>
-    <string name="already_have_an_account">Already have an account ?</string>
-    <string name="todo">TODO</string>
 </resources>

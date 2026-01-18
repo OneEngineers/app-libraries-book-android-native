@@ -4,7 +4,8 @@ apolloRuntime = "4.3.2"
 composeBom = "2025.07.00"
 converterGson = "2.9.0"
 daggerCompiler = "2.x"
-hiltAndroid = "2.42"
+firebaseBom = "34.1.0"
+hiltAndroid = "2.48"
 hiltCompiler = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -14,12 +15,17 @@ material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 kotlin = "2.1.21"
+ksp = "2.1.21-1.0.25"
 coreKtx = "1.16.0"
 legacySupportV4 = "1.0.0"
 picasso = "2.71828"
 recyclerview = "1.4.0"
 retrofit = "3.0.0"
 retrofitVersion = "2.9.0"
+lifecycle = "2.8.7"
+viewmodel = "2.8.7"
+ui = "1.9.2"
+foundation = "1.6.8"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -27,6 +33,8 @@ apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.r
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
+firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
@@ -48,8 +56,13 @@ ui = { module = "androidx.compose.ui:ui" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LibraryLighthouse"
+rootProject.name = "WeareOne"
 include(":app")

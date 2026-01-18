@@ -6,12 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.assistant.libraries"
+    namespace = "com.ones.assistant"
+    //noinspection GradleDependency,OldTargetApi
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.assistant.libraries"
+        applicationId = "com.ones.assistant"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -45,11 +47,26 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
+    }
 }
 
 apollo {
-    service("libraries") {
-        packageName.set("com.assistant.libraries.graphql")
+    service("ones") {
+        packageName.set("com.ones.assistant.graphql")
+        introspection {
+            endpointUrl.set("https://book-lms.itedev.online/graphql")
+            schemaFile.set(file("src/main/graphql/com/ones/assistant/schema.sdl"))
+        }
     }
 }
 
@@ -57,15 +74,20 @@ dependencies {
     // Compose BOM (optional but cleaner)
     implementation(platform(libs.compose.bom))
 
+    // App check
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.appcheck.playintegrity)
+
     // Jetpack Compose
     implementation(libs.activity.compose)
     implementation(libs.ui)
     implementation(libs.material3)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.ui)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    // UI & support libraries
+    // UI & support assistant
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -86,4 +108,32 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase BoM (manages versions)
+    implementation(platform(libs.firebase.bom))
+
+    // App Check Play Integrity (uses version from libs.versions.toml)
+    implementation(libs.firebase.appcheck.playintegrity)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0")) // BOM controls versions
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+
+    implementation("androidx.compose.material:material-icons-core:1.7.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.0")
+
+    implementation("androidx.navigation:navigation-compose:2.8.0") // use latest stable
+
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.compose.material3:material3:1.3.0")
+
+    // MVVM dependencies
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.foundation)
+
+    // Coil for image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }

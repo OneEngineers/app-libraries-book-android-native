@@ -1,10 +1,28 @@
 workflows:
   android-workflow:
-    name: Build Android Debug
-    max_build_duration: 15
+    name: Android Workflow
+    instance_type: mac_mini_m1
     environment:
-      java: 17
+      java: "21"
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'master'
+          include: true
     scripts:
-      - ./gradlew assembleDebug
+      - name: Run unit tests
+        script: |
+          ./gradlew app:testDebugUnitTest
+      - name: Run Android Lint
+        script: |
+          ./gradlew app:lintDebug
+      - name: Build Android App Bundle (AAB)
+        script: |
+          ./gradlew app:bundleDebug
+      - name: Build Android App (APK)
+        script: |
+          ./gradlew app:assembleDebug
     artifacts:
-      - app/build/outputs/**/*.apk
+      - app/build/outputs/bundle/debug/*.aab
+      - app/build/outputs/apk/debug/*.apk

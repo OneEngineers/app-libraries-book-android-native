@@ -1,6 +1,0 @@
-query Books {
-    books {
-        book_title
-        ISBN
-    }
-}

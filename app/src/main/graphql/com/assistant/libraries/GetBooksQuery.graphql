@@ -1,0 +1,20 @@
+query GetBooks {
+    bookLocals {
+        documentId
+        title
+        description
+        ISBN
+        page
+        release
+        language
+        book_cover {
+            url
+        }
+        publisher {
+            publisher_name
+        }
+        categories {
+            title
+        }
+    }
+}
