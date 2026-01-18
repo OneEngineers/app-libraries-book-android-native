@@ -2,15 +2,18 @@ package com.ones.assistant.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ones.assistant.data.repository.BookRepository
+import com.ones.assistant.domain.usecase.book.GetBooksUseCase
 import com.ones.assistant.presentation.views.books.BookDetails
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BooksListViewModel(
-    private val bookRepository: BookRepository = BookRepository()
+@HiltViewModel
+class BooksListViewModel @Inject constructor(
+    private val getBooksUseCase: GetBooksUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BooksListUiState())
@@ -25,29 +28,29 @@ class BooksListViewModel(
         )
 
         viewModelScope.launch {
-            val result = bookRepository.getBooks()
+            val result = getBooksUseCase()
 
             _uiState.value = when {
                 result.isSuccess -> {
-                    val booksData = result.getOrNull()
-                    val books = booksData?.bookLocals?.map { book ->
+                    val booksDomain = result.getOrNull() ?: emptyList()
+                    val books = booksDomain.map { book ->
                         BookDetails(
-                            id = book?.documentId ?: "",
-                            title = book?.title ?: "",
-                            author = book?.publisher?.publisher_name ?: "",
-                            description = book?.description ?: "",
-                            isbn = book?.ISBN ?: "",
-                            publishedYear = book?.release?.toString() ?: "",
-                            pages = book?.page?.toIntOrNull() ?: 0,
-                            language = book?.language?.name ?: "",
-                            category = book?.categories?.joinToString(", ") { it?.title ?: "" } ?: "",
-                            rating = 0f, // Not available in API
-                            totalRatings = 0, // Not available in API
-                            availableCopies = 0, // Not available in API
-                            totalCopies = 0, // Not available in API
-                            coverUrl = book?.book_cover?.url ?: ""
+                            id = book.documentId,
+                            title = book.title,
+                            author = book.publisher.publisher_name,
+                            description = book.description,
+                            isbn = book.ISBN,
+                            publishedYear = book.release,
+                            pages = book.page.toIntOrNull() ?: 0,
+                            language = book.language,
+                            category = book.categories.firstOrNull()?.title ?: "",
+                            rating = 0f,
+                            totalRatings = 0,
+                            availableCopies = 0,
+                            totalCopies = 0,
+                            coverUrl = book.book_cover.url
                         )
-                    } ?: emptyList()
+                    }
 
                     _uiState.value.copy(
                         isLoading = false,

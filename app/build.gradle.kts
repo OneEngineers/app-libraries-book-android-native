@@ -3,6 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.compose") // ✅ required for Kotlin 2.0 + Compose
     id("com.apollographql.apollo") version "4.3.2"
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 android {
@@ -74,6 +80,8 @@ dependencies {
     // Compose BOM (optional but cleaner)
     implementation(platform(libs.compose.bom))
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
     // App check
     implementation(libs.firebase.bom)
     implementation(libs.firebase.appcheck.playintegrity)

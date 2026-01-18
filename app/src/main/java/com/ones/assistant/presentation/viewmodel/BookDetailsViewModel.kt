@@ -3,16 +3,19 @@ package com.ones.assistant.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ones.assistant.data.repository.BookRepository
+import com.ones.assistant.domain.model.book.BooksDomainModel
+import com.ones.assistant.domain.usecase.book.GetBookDetailUseCase
+import com.ones.assistant.domain.usecase.book.GetBookDetailUseCaseImpl
 import com.ones.assistant.presentation.views.books.BookDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BookDetailsViewModel(
-    private val bookRepository: BookRepository = BookRepository()
+class BookDetailsViewModel @Inject constructor(
+    private val getBookDetailUseCase: GetBookDetailUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BookDetailsUiState())
@@ -25,38 +28,36 @@ class BookDetailsViewModel(
 
         viewModelScope.launch {
             Log.d("BookDetailsViewModel", "Loading book with ID: $documentId")
-            val result = bookRepository.getBookDetail(documentId)
+            val result = getBookDetailUseCase(documentId)
 
             _uiState.update { currentState ->
                 result.fold(
-                    onSuccess = { bookData ->
-                        Log.d("BookDetailsViewModel", "Raw data received: ${bookData.bookLocal}")
+                    onSuccess = { bookDomain ->
+                        Log.d("BookDetailsViewModel", "Domain data received: $bookDomain")
                         
-                        val book = bookData.bookLocal?.let { book ->
-                            BookDetails(
-                                id = documentId,
-                                title = book.title ?: "",
-                                author = book.publisher?.publisher_name ?: "",
-                                description = book.description ?: "",
-                                isbn = book.ISBN ?: "",
-                                publishedYear = book.release?.toString() ?: "",
-                                pages = book.page?.toIntOrNull() ?: 0,
-                                language = book.language?.name ?: "",
-                                category = book.categories.joinToString { it?.title ?: "" },
-                                rating = 0f,
-                                totalRatings = 0,
-                                availableCopies = 0,
-                                totalCopies = 0,
-                                coverUrl = book.book_cover?.url ?: ""
-                            )
-                        }
+                        val book = BookDetails(
+                            id = bookDomain.documentId,
+                            title = bookDomain.title,
+                            author = bookDomain.publisher.publisher_name,
+                            description = bookDomain.description,
+                            isbn = bookDomain.ISBN,
+                            publishedYear = bookDomain.release,
+                            pages = bookDomain.page.toIntOrNull() ?: 0,
+                            language = bookDomain.language,
+                            category = bookDomain.categories.firstOrNull()?.title ?: "",
+                            rating = 0f,
+                            totalRatings = 0,
+                            availableCopies = 0,
+                            totalCopies = 0,
+                            coverUrl = ""
+                        )
 
                         Log.d("BookDetailsViewModel", "Mapped book details: $book")
 
                         currentState.copy(
                             isLoading = false,
                             book = book,
-                            errorMessage = if (book == null) "Book not found" else null
+                            errorMessage = null
                         )
                     },
                     onFailure = { error ->

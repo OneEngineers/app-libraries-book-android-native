@@ -35,7 +35,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +53,9 @@ class MainScreen : ComponentActivity() {
 fun WearOneHome(
     onProfileClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
-    onBookClick: (String) -> Unit = {}
+    onBookClick: (String) -> Unit = {},
+    booksViewModel: BooksListViewModel = viewModel()
 ) {
-    val booksViewModel: BooksListViewModel = viewModel()
     val uiState by booksViewModel.uiState.collectAsState()
 
     // Load books when the screen is displayed
