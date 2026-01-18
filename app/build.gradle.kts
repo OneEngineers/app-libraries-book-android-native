@@ -82,6 +82,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
     // App check
     implementation(libs.firebase.bom)
     implementation(libs.firebase.appcheck.playintegrity)

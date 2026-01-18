@@ -36,6 +36,7 @@ import com.ones.assistant.presentation.viewmodel.BooksListViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @AndroidEntryPoint
 class MainScreen : ComponentActivity() {
@@ -54,7 +55,7 @@ fun WearOneHome(
     onProfileClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {},
-    booksViewModel: BooksListViewModel = viewModel()
+    booksViewModel: BooksListViewModel = hiltViewModel()
 ) {
     val uiState by booksViewModel.uiState.collectAsState()
 

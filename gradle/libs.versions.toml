@@ -5,6 +5,7 @@ composeBom = "2025.07.00"
 converterGson = "2.9.0"
 firebaseBom = "34.1.0"
 hilt = "2.51.1"
+hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -54,6 +55,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
