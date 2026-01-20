@@ -7,6 +7,7 @@ import com.ones.assistant.domain.model.book.BooksDomainModel
 import com.ones.assistant.domain.usecase.book.GetBookDetailUseCase
 import com.ones.assistant.domain.usecase.book.GetBookDetailUseCaseImpl
 import com.ones.assistant.presentation.views.books.BookDetails
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class BookDetailsViewModel @Inject constructor(
     private val getBookDetailUseCase: GetBookDetailUseCase
 ) : ViewModel() {
@@ -42,6 +44,7 @@ class BookDetailsViewModel @Inject constructor(
                             description = bookDomain.description,
                             isbn = bookDomain.ISBN,
                             publishedYear = bookDomain.release,
+                            coverUrl = bookDomain.book_cover.url,
                             pages = bookDomain.page.toIntOrNull() ?: 0,
                             language = bookDomain.language,
                             category = bookDomain.categories.firstOrNull()?.title ?: "",
@@ -49,7 +52,6 @@ class BookDetailsViewModel @Inject constructor(
                             totalRatings = 0,
                             availableCopies = 0,
                             totalCopies = 0,
-                            coverUrl = ""
                         )
 
                         Log.d("BookDetailsViewModel", "Mapped book details: $book")

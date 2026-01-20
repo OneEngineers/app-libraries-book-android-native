@@ -23,11 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ones.assistant.R
 import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookDetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class BookDetailsActivity : ComponentActivity() {
 @Composable
 fun BookDetailsScreen(
     bookId: String,
-    viewModel: BookDetailsViewModel = viewModel(),
+    viewModel: BookDetailsViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onBorrowClick: () -> Unit = {},
     onWishlistClick: () -> Unit = {}
@@ -169,18 +171,6 @@ fun BookDetailsScreen(
                                 modifier = Modifier
                                     .size(200.dp)
                                     .clip(RoundedCornerShape(8.dp)),
-                                contentScale = ContentScale.Crop,
-                                placeholder = painterResource(id = R.drawable.book_cover),
-                                error = painterResource(id = R.drawable.book_cover)
-                            )
-                        } else if (book.coverRes != 0) {
-                            Image(
-                                painter = painterResource(id = book.coverRes),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(200.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
-                                contentScale = ContentScale.Crop
                             )
                         }
                         
@@ -392,7 +382,7 @@ data class BookDetails(
     val availableCopies: Int,
     val totalCopies: Int,
     val coverRes: Int = 0,
-    val coverUrl: String = ""
+    val coverUrl: String = String()
 )
 
 @Preview(showBackground = true, showSystemUi = true)
