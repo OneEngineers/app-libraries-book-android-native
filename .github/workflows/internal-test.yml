@@ -1,0 +1,66 @@
+name: Internal Test Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build from'
+        required: true
+        default: 'develop'
+        type: string
+
+jobs:
+  build-internal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Generate Keystore
+        run: ./generate-keystore.sh
+
+      - name: Build Release APK
+        run: ./gradlew app:assembleRelease --no-daemon
+        env:
+          KEYSTORE_FILE: keystore.jks
+          STORE_PASSWORD: android
+          KEY_ALIAS: androiddebugkey
+          KEY_PASSWORD: android
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: internal-release-apk
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Build Release AAB
+        run: ./gradlew app:bundleRelease --no-daemon
+        env:
+          KEYSTORE_FILE: keystore.jks
+          STORE_PASSWORD: android
+          KEY_ALIAS: androiddebugkey
+          KEY_PASSWORD: android
+
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: internal-release-aab
+          path: app/build/outputs/bundle/release/*.aab

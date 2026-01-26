@@ -1,0 +1,72 @@
+name: Internal Release Test
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # ---------- Keystore ----------
+      - name: Restore or Generate Keystore
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "Restoring keystore"
+            echo "$KEYSTORE_BASE64" | base64 -d > release.jks
+          else
+            echo "Generating new keystore"
+            ./scripts/generate-keystore.sh
+            echo "⚠️ SAVE THIS KEYSTORE AFTER FIRST RUN"
+          fi
+
+      # ---------- Version from Tag ----------
+      - name: Extract Version
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION_NAME=${TAG_NAME#v}
+          VERSION_CODE=$(date +%s)
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+
+      # ---------- Build ----------
+      - name: Build Release AAB
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          ./gradlew bundleRelease \
+            -PversionName=$VERSION_NAME \
+            -PversionCode=$VERSION_CODE
+
+      # ---------- Play Service ----------
+      - name: Decode Play Service Account
+        run: |
+          echo "${{ secrets.PLAY_SERVICE_JSON_BASE64 }}" | base64 -d > play.json
+
+      # ---------- Upload to Internal ----------
+      - name: Upload to Google Play Internal Test
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: play.json
+          packageName: com.ones.assistant
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: completed
