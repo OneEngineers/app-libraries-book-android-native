@@ -31,7 +31,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.delay
 import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.presentation.views.books.BookDetails
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
