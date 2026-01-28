@@ -28,10 +28,16 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("release.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
+            storeFile = file("${rootProject.projectDir}/release.jks")
+            storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: System.getenv("KEYSTORE_PASSWORD") ?: "defaultPassword"
+            keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: System.getenv("KEY_ALIAS") ?: "release-key"
+            keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: System.getenv("KEY_PASSWORD") ?: "defaultPassword"
+        }
+        create("internal") {
+            storeFile = file("${rootProject.projectDir}/internal.jks")
+            storePassword = System.getenv("INTERNAL_KEYSTORE_PASSWORD") ?: "defaultPassword"
+            keyAlias = System.getenv("INTERNAL_KEY_ALIAS") ?: "internal-key"
+            keyPassword = System.getenv("INTERNAL_KEY_PASSWORD") ?: "defaultPassword"
         }
     }
 
@@ -44,6 +50,12 @@ android {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
+        }
+        create("internal") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("internal")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 
