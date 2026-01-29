@@ -171,7 +171,7 @@ fun BottomCard(title: String, subtitle: String, iconRes: Int, modifier: Modifier
     }
 }
 
-public data class CategoryData(val title: String, val iconRes: Int, val badge: String?)
+data class CategoryData(val title: String, val iconRes: Int, val badge: String?)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewHomeCategoryScreen() {

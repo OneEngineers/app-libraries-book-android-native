@@ -7,6 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ContactSupport
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -53,7 +56,7 @@ fun SettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -151,14 +154,14 @@ fun SettingsScreen(
                 title = "Support"
             ) {
                 SettingsItem(
-                    icon = Icons.Default.Help,
+                    icon = Icons.AutoMirrored.Filled.Help,
                     title = "Help Center",
                     subtitle = "Get help and find answers",
                     onClick = { /* Handle help center */ }
                 )
                 
                 SettingsItem(
-                    icon = Icons.Default.ContactSupport,
+                    icon = Icons.AutoMirrored.Filled.ContactSupport,
                     title = "Contact Support",
                     subtitle = "Get in touch with our support team",
                     onClick = { /* Handle contact support */ }

@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ones.assistant.presentation.viewmodel.LoginViewModel
 
 
-annotation class R
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
