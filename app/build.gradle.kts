@@ -77,7 +77,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4" // ✅ matches your compose-ui version
+        kotlinCompilerExtensionVersion = "1.5.14" // ✅ matches your compose-ui version
     }
 
     compileOptions {
@@ -105,6 +105,22 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:generateFunctionKeyMetaAnnotations=true",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=IntrinsicRemember",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=OptimizeNonSkippingGroups",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=StrongSkipping"
+            )
+        )
+    }
+}
 apollo {
     service("ones") {
         packageName.set("com.ones.assistant.graphql")
