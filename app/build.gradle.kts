@@ -12,6 +12,7 @@ kapt {
 }
 
 android {
+
     namespace = "com.ones.assistant"
     //noinspection GradleDependency,OldTargetApi
     compileSdk = 35
@@ -121,6 +122,7 @@ kotlin {
         )
     }
 }
+
 apollo {
     service("ones") {
         packageName.set("com.ones.assistant.graphql")
