@@ -60,7 +60,7 @@ fun CategoryGrid() {
         CategoryData("Library", R.drawable.library_books_24px, null),
 //        CategoryData("Lab Panel", R.drawable.lab_panel_24px, null),
         CategoryData("Movie", R.drawable.movie_icon, null),
-//        CategoryData("Nham24", R.drawable.podcasts_24px, "Fave"),
+        CategoryData("EchoPanda", R.drawable.echopanda,null),
 //        CategoryData("Ride later", R.drawable.podcasts_24px, null),
         CategoryData("All", R.drawable.read_more_30dp, null),
     )
@@ -136,7 +136,7 @@ fun BottomRow() {
     ) {
         BottomCard(
             title = "Wallet",
-            subtitle = "Add a card",
+            subtitle = "0",
             iconRes = R.drawable.wallet_24px,
             modifier = Modifier.weight(1f)
         )
