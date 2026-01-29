@@ -94,6 +94,10 @@ android {
     }
 
     packaging {
+        jniLibs {
+            keepDebugSymbols.add("**/libandroidx.graphics.path.so")
+            keepDebugSymbols.add("**/libdatastore_shared_counter.so")
+        }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
