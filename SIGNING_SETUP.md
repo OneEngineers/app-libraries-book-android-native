@@ -13,6 +13,21 @@ Two keystores are maintained in the project root:
 ### Environment Variables
 The build system reads signing credentials from environment variables. Set them before building:
 
+### Generate run script
+
+```bash
+chmod +x generate-keystore.sh
+```
+
+### Generate both keystores with environment variables
+
+```bash
+export RELEASE_KEYSTORE_PASSWORD="secure-password-123"
+export RELEASE_KEY_ALIAS="release-key"
+export RELEASE_KEY_PASSWORD="key-password-123"
+./generate-keystore.sh all
+```
+
 **For Release Build:**
 ```bash
 export RELEASE_KEYSTORE_PASSWORD="your-password"

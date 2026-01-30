@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.ones.assistant.presentation.views.auth
 
 import android.os.Bundle

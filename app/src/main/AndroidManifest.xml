@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ones.assistant">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -20,8 +19,7 @@
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
-            android:configChanges="screenLayout|orientation|screenSize
-            |keyboard|keyboardHidden|smallestScreenSize"
+            android:configChanges="screenLayout|orientation|screenSize|keyboardHidden|smallestScreenSize"
             android:exported="true"
             tools:ignore="MissingClass">
             <intent-filter>

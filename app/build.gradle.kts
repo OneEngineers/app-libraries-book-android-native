@@ -12,6 +12,7 @@ kapt {
 }
 
 android {
+
     namespace = "com.ones.assistant"
     //noinspection GradleDependency,OldTargetApi
     compileSdk = 35
@@ -42,7 +43,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -65,7 +78,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4" // ✅ matches your compose-ui version
+        kotlinCompilerExtensionVersion = "1.5.14" // ✅ matches your compose-ui version
     }
 
     compileOptions {
@@ -82,10 +95,31 @@ android {
     }
 
     packaging {
+        jniLibs {
+            keepDebugSymbols.add("**/libandroidx.graphics.path.so")
+            keepDebugSymbols.add("**/libdatastore_shared_counter.so")
+        }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:generateFunctionKeyMetaAnnotations=true",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=IntrinsicRemember",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=OptimizeNonSkippingGroups",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=StrongSkipping"
+            )
+        )
     }
 }
 
