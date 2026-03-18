@@ -61,38 +61,16 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF4F4F4)),
+            .background(Color(0xFFE0CFFA)),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .width(370.dp)
+                .width(400.dp)
                 .padding(19.dp)
         ) {
-            // Logo and Title
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center
-//            ) {
-//
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "Library Lighthouse",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 22.sp,
-//                    color = Color.Black //blue color
-//                )
-//            }
 
-//            Spacer(modifier = Modifier.height(24.dp))
-
-            // Card container
-//            Card(
-//                modifier = Modifier.fillMaxWidth(),
-//                shape = RoundedCornerShape(10.dp),
-//                border = ButtonDefaults.outlinedButtonBorder
-//            ) {
             Column(
                 modifier = Modifier.padding(26.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -140,9 +118,9 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    shape = RoundedCornerShape(6.dp),
+                    shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1A237E)
+                        containerColor = Color(0xFFA301E6)
                     ),
                     enabled = !uiState.isLoading
                 ) {
@@ -152,7 +130,11 @@ fun LoginScreen(
                             color = Color.White
                         )
                     } else {
-                        Text("Login", color = Color.White)
+                        Text("Login",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                            )
                     }
                 }
 
@@ -179,12 +161,12 @@ fun LoginScreen(
                     modifier = Modifier.clickable { /* handle forgot password */ }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 // Navigate to Register
                 Text(
                     text = "Don't have an account? Sign Up",
-                    color = Color(0xFF1A237E),
+                    color = Color(0xFF9C27B0),
                     fontSize = 14.sp,
                     modifier = Modifier.clickable { onNavigateToRegister() }
                 )
