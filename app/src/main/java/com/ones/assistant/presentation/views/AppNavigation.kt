@@ -11,6 +11,8 @@ import com.ones.assistant.presentation.views.feature.SearchScreen
 import com.ones.assistant.presentation.views.home.HomeScreen
 import com.ones.assistant.presentation.views.users.ProfileScreen
 import com.ones.assistant.presentation.views.users.SettingsScreen
+import com.ones.assistant.presentation.views.books.LibraryScreen
+
 
 @Composable
 fun MyAppNavigation() {
@@ -28,6 +30,7 @@ fun MyAppNavigation() {
                 onLoginClick = {
                     navController.navigate(Routes.LoginScreen)
                 }
+
             )
         }
 
@@ -64,9 +67,10 @@ fun MyAppNavigation() {
             WearOneHome(
                 onProfileClick = { navController.navigate(Routes.ProfileScreen) },
                 onSearchClick = { navController.navigate(Routes.SearchScreen) },
-                onBookClick = { bookId -> 
+                onBookClick = { bookId ->
                     navController.navigate("${Routes.BookDetailsScreen}/$bookId")
-                }
+                },
+                onLibraryClick = { navController.navigate(Routes.LibraryScreen) } // 👈 Add here too
             )
         }
 
@@ -105,6 +109,10 @@ fun MyAppNavigation() {
                 onBorrowClick = { /* Handle borrow */ },
                 onWishlistClick = { /* Handle wishlist */ }
             )
+        }
+
+        composable(Routes.LibraryScreen) {
+            LibraryScreen(navController )
         }
     }
 }

@@ -20,5 +20,6 @@ object Routes {
     
     // Navigation
     const val MyAppNavigation = "my_app_navigation"
+    const val LibraryScreen = "library"
 }
 

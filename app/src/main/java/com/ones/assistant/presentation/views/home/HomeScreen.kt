@@ -41,7 +41,7 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE0CFFA)),
+            .background(Color(0xFFFFFFFF)),
         contentAlignment = Alignment.Center
     ) {
         Column(
