@@ -36,6 +36,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
+
 
 @AndroidEntryPoint
 class MainScreen : ComponentActivity() {
@@ -53,64 +56,76 @@ class MainScreen : ComponentActivity() {
 fun WearOneHome(
     onProfileClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
+    onLibraryClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {},
     booksViewModel: BooksListViewModel = hiltViewModel()
 ) {
     val uiState by booksViewModel.uiState.collectAsState()
 
-    // Load books when the screen is displayed
     LaunchedEffect(Unit) {
         booksViewModel.loadBooks()
     }
 
     var selectedIndex by remember { mutableIntStateOf(0) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logo_app),
-                            contentDescription = "App Logo",
-                            modifier = Modifier
-                                .size(40.dp)
-                                .padding(end = 8.dp)
-                        )
-                        Text(
-                            text = "WeareOne",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF0D1B2A)
-                        )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFE0CFFA))
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(id = R.drawable.logo_app),
+                                contentDescription = "App Logo",
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .padding(end = 8.dp)
+                            )
+                            Text(
+                                text = "WeareOne",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF0D1B2A)
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = onSearchClick) {
+                            Icon(Icons.Default.Search, contentDescription = "Search")
+                        }
+                        IconButton(onClick = onProfileClick) {
+                            Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
+                        }
                     }
-                },
-                actions = {
-                    IconButton(onClick = onSearchClick) {
-                        Icon(Icons.Default.Search, contentDescription = "Notification")
-                    }
-                    IconButton(onClick = onProfileClick) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
-                    }
-                }
-            )
-        },
-        bottomBar = {
-            BottomNavBar(selectedIndex = selectedIndex, onItemSelected = { selectedIndex = it })
-        }
-    ) { innerPadding ->
-        when (selectedIndex) {
-            0 -> HomeScreen(
-                modifier = Modifier.padding(innerPadding),
-                books = uiState.books,
-                onBookClick = onBookClick
-            )
-            1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { 
-                Text("Search Screen - Use top bar search or navigate to SearchScreen") 
+                )
+            },
+            bottomBar = {
+                BottomNavBar(selectedIndex = selectedIndex, onItemSelected = { selectedIndex = it })
             }
-            2 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Borrow Screen") }
-            3 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Return Screen") }
-            4 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Notifications") }
+        ) { innerPadding ->
+            when (selectedIndex) {
+                0 -> HomeScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    books = uiState.books,
+                    onBookClick = onBookClick,
+                    onLibraryClick = onLibraryClick
+                )
+                1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Search Screen - Use top bar search or navigate to SearchScreen")
+                }
+                2 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Borrow Screen")
+                }
+                3 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Return Screen")
+                }
+                4 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Notifications")
+                }
+            }
         }
     }
 }
@@ -119,7 +134,8 @@ fun WearOneHome(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     books: List<BookDetails> = emptyList(),
-    onBookClick: (String) -> Unit = {}
+    onBookClick: (String) -> Unit = {},
+    onLibraryClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier
@@ -127,9 +143,10 @@ fun HomeScreen(
             .background(Color.White)
     ) {
         item { BannerSection() }
-        item { HomeCategoryScreen() }
+        item { HomeCategoryScreen(onLibraryClick = onLibraryClick) }
         item { BookSection(books = books, onBookClick = onBookClick) }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item { PodcastSection() }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
     }
 }
 
@@ -138,7 +155,7 @@ fun HomeScreen(
 fun BannerSection() {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val bannerImages = listOf(
-        R.drawable.images,
+        R.drawable.library,
         R.drawable.podcasts,
         R.drawable.movies
     )
@@ -153,20 +170,20 @@ fun BannerSection() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(250.dp)
     ) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(250.dp)
         ) { page ->
             Image(
                 painter = painterResource(id = bannerImages[page]),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(250.dp),
                 contentScale = ContentScale.Crop
             )
         }
@@ -177,15 +194,16 @@ fun BannerSection() {
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.Center
-        ) {        repeat(pagerState.pageCount) { iteration ->
-            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .background(color, shape = androidx.compose.foundation.shape.CircleShape)
-                    .size(8.dp)
-            )
-        }
+        ) {
+            repeat(pagerState.pageCount) { iteration ->
+                val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .background(color, shape = androidx.compose.foundation.shape.CircleShape)
+                        .size(8.dp)
+                )
+            }
         }
     }
 }
@@ -198,10 +216,7 @@ fun BookSection(
     Column {
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)) {
             items(items = books, key = { it.id }) { book ->
-                BookItem(
-                    book = book,
-                    onBookClick = onBookClick
-                )
+                BookItem(book = book, onBookClick = onBookClick)
             }
         }
     }
@@ -233,6 +248,57 @@ fun BookItem(
 }
 
 @Composable
+fun PodcastSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = "You Might Like",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        LazyRow(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            items(listOf(
+                PodcastItem("The 7 Habits Highly Effective People", "by Stephen Covey", R.drawable.habits_book),
+                PodcastItem("Losing the Plot", "by Annaleise Byrd", R.drawable.losing_the_plot_book),
+                PodcastItem("The Only Skill that Matters", "by Jonathan Levi", R.drawable.only_skill_book),
+                PodcastItem("The Executive Coaching Playbook", "by Nadine Greiner, Ph.D. and Becky Davis, MA", R.drawable.coaching_book)
+            )) { podcast ->
+                PodcastCard(podcast)
+            }
+        }
+    }
+}
+
+data class PodcastItem(val title: String, val creator: String, val coverRes: Int)
+
+@Composable
+fun PodcastCard(podcast: PodcastItem) {
+    Column(
+        modifier = Modifier
+            .width(140.dp)
+            .padding(8.dp)
+            .clickable { /* handle click */ },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = podcast.coverRes),
+            contentDescription = podcast.title,
+            modifier = Modifier
+                .width(115  .dp)
+                .height(150.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
+        Text(podcast.title, fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1)
+        Text(podcast.creator, fontSize = 10.sp, color = Color.Gray, maxLines = 1)
+    }
+}
+@Composable
 fun BottomNavBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
     val items = listOf("Home", "Content", "Transfer", "Activity", "Mores")
     val icons = listOf(
@@ -260,3 +326,4 @@ fun BottomNavBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
 fun PreviewMainScreen() {
     WearOneHome()
 }
+
