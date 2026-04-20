@@ -58,6 +58,8 @@ fun WearOneHome(
     onSearchClick: () -> Unit = {},
     onLibraryClick: () -> Unit = {},
     onBookClick: (String) -> Unit = {},
+    onPodcastClick: () -> Unit = {},
+    onMovieClick: () -> Unit = {},
     booksViewModel: BooksListViewModel = hiltViewModel()
 ) {
     val uiState by booksViewModel.uiState.collectAsState()
@@ -111,7 +113,9 @@ fun WearOneHome(
                     modifier = Modifier.padding(innerPadding),
                     books = uiState.books,
                     onBookClick = onBookClick,
-                    onLibraryClick = onLibraryClick
+                    onLibraryClick = onLibraryClick,
+                    onPodcastClick = onPodcastClick,
+                    onMovieClick = onMovieClick
                 )
                 1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Search Screen - Use top bar search or navigate to SearchScreen")
@@ -135,7 +139,9 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     books: List<BookDetails> = emptyList(),
     onBookClick: (String) -> Unit = {},
-    onLibraryClick: () -> Unit = {}
+    onLibraryClick: () -> Unit = {},
+    onPodcastClick: () -> Unit = {},
+    onMovieClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier
@@ -143,9 +149,15 @@ fun HomeScreen(
             .background(Color.White)
     ) {
         item { BannerSection() }
-        item { HomeCategoryScreen(onLibraryClick = onLibraryClick) }
+        item { HomeCategoryScreen(
+                onLibraryClick = onLibraryClick,
+                onPodcastClick = onPodcastClick,
+                onMovieClick = onMovieClick
+        ) }
         item { BookSection(books = books, onBookClick = onBookClick) }
+        item { LibrarySection(onLibraryClick = onLibraryClick) }
         item { PodcastSection() }
+        item { MovieSection(onMovieClick = onMovieClick) }
         item { Spacer(modifier = Modifier.height(8.dp)) }
     }
 }
@@ -246,19 +258,23 @@ fun BookItem(
         Text(book.author, fontSize = 10.sp, color = Color.Gray, maxLines = 1)
     }
 }
-
 @Composable
-fun PodcastSection() {
+fun LibrarySection(onLibraryClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Text(
-            text = "You Might Like",
+            text = "Your popular >",
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "Based on your reading.",
+            fontSize = 14.sp,
+            color = Color.Gray
         )
 
         LazyRow(contentPadding = PaddingValues(horizontal = 8.dp)) {
@@ -267,6 +283,68 @@ fun PodcastSection() {
                 PodcastItem("Losing the Plot", "by Annaleise Byrd", R.drawable.losing_the_plot_book),
                 PodcastItem("The Only Skill that Matters", "by Jonathan Levi", R.drawable.only_skill_book),
                 PodcastItem("The Executive Coaching Playbook", "by Nadine Greiner, Ph.D. and Becky Davis, MA", R.drawable.coaching_book)
+            )) { podcast ->
+                PodcastCard(podcast)
+            }
+        }
+    }
+}
+@Composable
+fun MovieSection(onMovieClick: () -> Unit = {}) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = "You Might Like >",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "Based on your watching.",
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
+
+        LazyRow(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            items(listOf(
+                PodcastItem("The 7 Habits Highly Effective People", "by Stephen Covey", R.drawable.jailer),
+                PodcastItem("Losing the Plot", "by Annaleise Byrd", R.drawable.beauty),
+                PodcastItem("The Only Skill that Matters", "by Jonathan Levi", R.drawable.seven_scream),
+                PodcastItem("The Executive Coaching Playbook", "by Nadine Greiner, Ph.D. and Becky Davis, MA", R.drawable.shawshak)
+            )) { podcast ->
+                PodcastCard(podcast)
+            }
+        }
+    }
+}
+@Composable
+fun PodcastSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = "You Might Like >",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "Based on your listening.",
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
+
+        LazyRow(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            items(listOf(
+                PodcastItem("The 7 Habits Highly Effective People", "by Stephen Covey", R.drawable.dear_to_lead),
+                PodcastItem("Losing the Plot", "by Annaleise Byrd", R.drawable.for_the_record),
+                PodcastItem("The Only Skill that Matters", "by Jonathan Levi", R.drawable.the321),
+                PodcastItem("The Executive Coaching Playbook", "by Nadine Greiner, Ph.D. and Becky Davis, MA", R.drawable.strategies)
             )) { podcast ->
                 PodcastCard(podcast)
             }

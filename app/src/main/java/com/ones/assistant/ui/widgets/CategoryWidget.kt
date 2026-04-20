@@ -25,19 +25,31 @@ import androidx.compose.ui.unit.sp
 import com.ones.assistant.R
 
 @Composable
-fun HomeCategoryScreen(onLibraryClick: () -> Unit = {}) {
+fun HomeCategoryScreen(
+    onLibraryClick: () -> Unit = {},
+    onPodcastClick: () -> Unit = {},
+    onMovieClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        CategoryGrid(onLibraryClick = onLibraryClick)
+        CategoryGrid(
+            onLibraryClick = onLibraryClick,
+            onPodcastClick = onPodcastClick,
+            onMovieClick = onMovieClick
+        )
         Spacer(modifier = Modifier.height(18.dp))
     }
 }
 
 @Composable
-fun CategoryGrid(onLibraryClick: () -> Unit) {
+fun CategoryGrid(
+    onLibraryClick: () -> Unit,
+    onPodcastClick: () -> Unit,
+    onMovieClick: () -> Unit
+) {
     val items = listOf(
         CategoryData("Podcast", R.drawable.podcasts_24px, null),
         CategoryData("Library", R.drawable.library_books_24px, null),
@@ -48,7 +60,7 @@ fun CategoryGrid(onLibraryClick: () -> Unit) {
         columns = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.height(80.dp)
+        modifier = Modifier.height(100.dp)
     ) {
         items(items) { item ->
             CategoryItem(
@@ -56,8 +68,10 @@ fun CategoryGrid(onLibraryClick: () -> Unit) {
                 icon = painterResource(id = item.iconRes),
                 badge = item.badge,
                 onClick = {
-                    if (item.title == "Library") {
-                        onLibraryClick()   // Navigate to BookListScreen
+                    when (item.title) {
+                        "Library" -> onLibraryClick()
+                        "Podcast" -> onPodcastClick()
+                        "Movie" -> onMovieClick()
                     }
                 }
             )
@@ -70,7 +84,7 @@ fun CategoryItem(
     name: String,
     icon: Painter,
     badge: String? = null,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Column(
@@ -86,9 +100,7 @@ fun CategoryItem(
             Image(
                 painter = icon,
                 contentDescription = name,
-                modifier = Modifier
-                    .size(30.dp)
-                    .align(Alignment.Center),
+                modifier = Modifier.size(30.dp),
                 contentScale = ContentScale.Crop
             )
             badge?.let {
