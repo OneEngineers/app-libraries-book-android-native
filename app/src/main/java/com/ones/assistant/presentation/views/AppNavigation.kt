@@ -12,6 +12,8 @@ import com.ones.assistant.presentation.views.home.HomeScreen
 import com.ones.assistant.presentation.views.users.ProfileScreen
 import com.ones.assistant.presentation.views.users.SettingsScreen
 import com.ones.assistant.presentation.views.books.LibraryScreen
+import com.ones.assistant.presentation.views.podcast.PodcastScreen
+
 
 
 @Composable
@@ -70,7 +72,10 @@ fun MyAppNavigation() {
                 onBookClick = { bookId ->
                     navController.navigate("${Routes.BookDetailsScreen}/$bookId")
                 },
-                onLibraryClick = { navController.navigate(Routes.LibraryScreen) } // 👈 Add here too
+                onLibraryClick = { navController.navigate(Routes.LibraryScreen) },
+                onPodcastClick = { navController.navigate(Routes.PodcastScreen) },
+                onMovieClick = { /* TODO: navigate to MovieScreen */ }
+
             )
         }
 
@@ -113,6 +118,9 @@ fun MyAppNavigation() {
 
         composable(Routes.LibraryScreen) {
             LibraryScreen(navController )
+        }
+        composable(Routes.PodcastScreen) {
+            PodcastScreen(navController)
         }
     }
 }
