@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ones.assistant.R
 import com.ones.assistant.presentation.views.Routes
-
-// ===================== PODCAST LIST SCREEN =====================
+gi
 
 @Composable
 fun PodcastScreen(navController: NavController) {
@@ -54,8 +53,6 @@ fun PodcastScreen(navController: NavController) {
         }
     }
 }
-
-// ===================== TOP BAR =====================
 
 @Composable
 fun TopBar(onBackClick: () -> Unit = {}) {
@@ -96,8 +93,6 @@ fun TopBar(onBackClick: () -> Unit = {}) {
         )
     }
 }
-
-// ===================== PODCAST CARD =====================
 
 @Composable
 fun PodcastCard(
@@ -147,7 +142,7 @@ fun PodcastCard(
     }
 }
 
-// ===================== DATA MODEL =====================
+
 
 data class PodcastItem(
     val title: String,
@@ -155,7 +150,7 @@ data class PodcastItem(
     val coverRes: Int
 )
 
-// ===================== SAMPLE DATA =====================
+
 
 fun getPodcasts(): List<PodcastItem> {
     return listOf(
