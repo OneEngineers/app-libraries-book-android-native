@@ -27,8 +27,7 @@ import com.ones.assistant.R
 @Composable
 fun HomeCategoryScreen(
     onLibraryClick: () -> Unit = {},
-    onPodcastClick: () -> Unit = {},
-    onMovieClick: () -> Unit = {}
+    onPodcastClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -37,8 +36,7 @@ fun HomeCategoryScreen(
     ) {
         CategoryGrid(
             onLibraryClick = onLibraryClick,
-            onPodcastClick = onPodcastClick,
-            onMovieClick = onMovieClick
+            onPodcastClick = onPodcastClick
         )
         Spacer(modifier = Modifier.height(18.dp))
     }
@@ -47,17 +45,15 @@ fun HomeCategoryScreen(
 @Composable
 fun CategoryGrid(
     onLibraryClick: () -> Unit,
-    onPodcastClick: () -> Unit,
-    onMovieClick: () -> Unit
+    onPodcastClick: () -> Unit
 ) {
     val items = listOf(
         CategoryData("Podcast", R.drawable.podcasts_24px, null),
-        CategoryData("Library", R.drawable.library_books_24px, null),
-        CategoryData("Movie", R.drawable.movie_icon, null),
+        CategoryData("Library", R.drawable.library_books_24px, null)
     )
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.height(100.dp)
@@ -71,7 +67,6 @@ fun CategoryGrid(
                     when (item.title) {
                         "Library" -> onLibraryClick()
                         "Podcast" -> onPodcastClick()
-                        "Movie" -> onMovieClick()
                     }
                 }
             )
@@ -106,7 +101,7 @@ fun CategoryItem(
             badge?.let {
                 Box(
                     modifier = Modifier
-                        .background(Color(0xFFF4F4F4), RoundedCornerShape(12.dp))
+                        .background(Color(0xFFEDE7F6), RoundedCornerShape(12.dp))
                         .padding(horizontal = 6.dp, vertical = 2.dp)
                         .align(Alignment.TopStart)
                 ) {

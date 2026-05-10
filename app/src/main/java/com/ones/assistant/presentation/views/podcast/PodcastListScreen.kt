@@ -2,11 +2,11 @@ package com.ones.assistant.presentation.views.podcast
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,16 +18,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ones.assistant.R
 import androidx.navigation.NavController
+import com.ones.assistant.R
+import com.ones.assistant.presentation.views.Routes
+
 
 @Composable
 fun PodcastScreen(navController: NavController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFE0CFFA))
     ) {
+
         TopBar(
             onBackClick = { navController.popBackStack() }
         )
@@ -38,10 +42,11 @@ fun PodcastScreen(navController: NavController) {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(getPodcasts()) { podcast ->
+
                 PodcastCard(
                     podcast = podcast,
                     onClick = {
-                        // TODO: navigate to Podcast Details
+                        navController.navigate(Routes.PodcastDetailScreen)
                     }
                 )
             }
@@ -51,21 +56,23 @@ fun PodcastScreen(navController: NavController) {
 
 @Composable
 fun TopBar(onBackClick: () -> Unit = {}) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .background(Color.White)
     ) {
+
         Icon(
             painter = painterResource(id = R.drawable.back),
             contentDescription = "Back",
+            tint = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(start = 16.dp)
                 .size(24.dp)
-                .clickable { onBackClick() },
-            tint = Color.Black
+                .clickable { onBackClick() }
         )
 
         Text(
@@ -90,8 +97,9 @@ fun TopBar(onBackClick: () -> Unit = {}) {
 @Composable
 fun PodcastCard(
     podcast: PodcastItem,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,6 +108,7 @@ fun PodcastCard(
             .clickable { onClick() }
             .padding(12.dp)
     ) {
+
         Image(
             painter = painterResource(id = podcast.coverRes),
             contentDescription = podcast.title,
@@ -116,8 +125,9 @@ fun PodcastCard(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Center
         ) {
+
             Text(
-                podcast.title,
+                text = podcast.title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 maxLines = 2
@@ -128,17 +138,19 @@ fun PodcastCard(
                 fontSize = 12.sp,
                 color = Color.Gray
             )
-
-            Spacer(modifier = Modifier.height(6.dp))
         }
     }
 }
+
+
 
 data class PodcastItem(
     val title: String,
     val creator: String,
     val coverRes: Int
 )
+
+
 
 fun getPodcasts(): List<PodcastItem> {
     return listOf(

@@ -13,7 +13,7 @@ import com.ones.assistant.presentation.views.users.ProfileScreen
 import com.ones.assistant.presentation.views.users.SettingsScreen
 import com.ones.assistant.presentation.views.books.LibraryScreen
 import com.ones.assistant.presentation.views.podcast.PodcastScreen
-
+import com.ones.assistant.presentation.views.podcast.PodcastDetailScreen
 
 
 @Composable
@@ -26,13 +26,12 @@ fun MyAppNavigation() {
     ) {
         composable(Routes.HomeScreen) {
             HomeScreen(
-                onCreateAccountClick = {
+                onSignUpClick = {
                     navController.navigate(Routes.SignupScreen)
                 },
                 onLoginClick = {
                     navController.navigate(Routes.LoginScreen)
                 }
-
             )
         }
 
@@ -122,5 +121,12 @@ fun MyAppNavigation() {
         composable(Routes.PodcastScreen) {
             PodcastScreen(navController)
         }
+        composable(Routes.PodcastDetailScreen) {
+            PodcastDetailScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+
     }
 }

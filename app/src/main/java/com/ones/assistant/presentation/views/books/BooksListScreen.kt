@@ -2,13 +2,13 @@ package com.ones.assistant.presentation.views.books
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,31 +19,52 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ones.assistant.R
 import androidx.navigation.NavController
+import com.ones.assistant.R
+import com.ones.assistant.presentation.views.Routes
 
-
-
+// ===================== MAIN SCREEN =====================
 
 @Composable
 fun LibraryScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE0CFFA))
+            .background(Color(0xFFEDE7F6))
     ) {
-        TopBar(onBackClick = {
-            navController.popBackStack() // go back
-        })
-        LazyColumn(
-            modifier = Modifier.padding(horizontal = 26.dp, vertical = 8.dp)
-        ) {
-            items(getLibraryBooks()) { book ->
-                BookCard(book)
+        TopBar(
+            onBackClick = { navController.popBackStack() }
+        )
+
+        LazyColumn {
+            item {
+                BookSection(
+                    title = "Trending Books",
+                    books = getLibraryBooks(),
+                    navController = navController
+                )
+            }
+
+            item {
+                BookSection(
+                    title = "Classic Books",
+                    books = getLibraryBooks(),
+                    navController = navController
+                )
+            }
+
+            item {
+                BookSection(
+                    title = "Books We Love",
+                    books = getLibraryBooks(),
+                    navController = navController
+                )
             }
         }
     }
 }
+
+// ===================== TOP BAR =====================
 
 @Composable
 fun TopBar(onBackClick: () -> Unit = {}) {
@@ -51,91 +72,133 @@ fun TopBar(onBackClick: () -> Unit = {}) {
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(Color(0xFFFFFFFF))
+            .background(Color.White)
     ) {
-        // Back icon on the left
         Icon(
-            painter = painterResource(id = R.drawable.back), // replace with your back icon
+            painter = painterResource(id = R.drawable.back),
             contentDescription = "Back",
+            tint = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(start = 16.dp)
-                .size(21.dp)
-                .clickable { onBackClick() },
-            tint = Color.Black
+                .size(20.dp)
+                .clickable { onBackClick() }
         )
 
-        // Centered semibold text
         Text(
             text = "LIBRARY",
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Black,
             modifier = Modifier.align(Alignment.Center)
         )
 
-        // Logo on the right
         Icon(
             painter = painterResource(id = R.drawable.logo_app),
             contentDescription = "Logo",
+            tint = Color(0xFFE91E63),
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 16.dp)
-                .size(36.dp),
-            tint = Color(0xFFE91E63)
+                .size(32.dp)
         )
     }
 }
 
+// ===================== SECTION =====================
 
 @Composable
-fun BookCard(book: BookItem) {
-    Row(
+fun BookSection(
+    title: String,
+    books: List<BookItem>,
+    navController: NavController
+) {
+    Column(modifier = Modifier.padding(vertical = 12.dp)) {
+
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(books) { book ->
+                BookHorizontalCard(book = book) {
+                    navController.navigate("${Routes.BookDetailsScreen}/${book.id}")
+                }
+            }
+        }
+    }
+}
+
+// BOOK CARD
+
+@Composable
+fun BookHorizontalCard(
+    book: BookItem,
+    onClick: () -> Unit
+) {
+    val buttonText = when (book.id) {
+        "1" -> "Join Waitlist"
+        "2" -> "Checked Out"
+        "3" -> "Preview Only"
+        "4" -> "Read"
+        else -> "Borrow"
+    }
+
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .background(Color.White, shape = RoundedCornerShape(12.dp))
-            .padding(12.dp)
+            .width(120.dp)
+            .clickable { onClick() }
     ) {
         Image(
             painter = painterResource(id = book.coverRes),
             contentDescription = book.title,
             modifier = Modifier
-                .width(100.dp)
-                .height(140.dp)
-                .clip(RoundedCornerShape(8.dp)),
+                .height(170.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
         )
-        Spacer(modifier = Modifier.width(14.dp))
-        Column(
-            modifier = Modifier.weight(1f)
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Button(
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            contentPadding = PaddingValues(vertical = 4.dp)
         ) {
-            Text(book.title, fontWeight = FontWeight.Bold, fontSize = 10.sp)
-            Text("by ${book.author}", fontSize = 12.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Available",
-                fontSize = 11.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .background(Color(0xFF9C27B0), shape = RoundedCornerShape(16.dp))
-                    .padding(horizontal = 20.dp, vertical = 0.5.dp)
+                text = buttonText,
+                fontSize = 12.sp
             )
         }
     }
 }
 
-data class BookItem(val title: String, val author: String, val coverRes: Int)
+// ===================== DATA MODEL =====================
+
+data class BookItem(
+    val id: String,
+    val title: String,
+    val author: String,
+    val coverRes: Int
+)
+
+// ===================== SAMPLE DATA =====================
 
 fun getLibraryBooks(): List<BookItem> {
     return listOf(
-        BookItem("The Only Skill that Matters", "Jonathan Levi", R.drawable.only_skill_book),
-        BookItem("C++ Programming Language", "Bjarne Stroustrup", R.drawable.cplusplus_book),
-        BookItem("Coaching", "James Gosling", R.drawable.healthy_book),
-        BookItem("Losing the Plot", "Annaleise Byrd", R.drawable.losing_the_plot_book),
-        BookItem("The 7 Habits Highly Effective People", "Stephen Covey", R.drawable.habits_book),
-        BookItem("Java Programming Language", "James Gosling", R.drawable.java_book),
-        BookItem("The Executive Coaching Playbook", "Nadine Greiner, Ph.D. and Becky Davis, MA", R.drawable.coaching_book)
-
+        BookItem("1", "The Only Skill that Matters", "Jonathan Levi", R.drawable.only_skill_book),
+        BookItem("2", "C++ Programming Language", "Bjarne Stroustrup", R.drawable.cplusplus_book),
+        BookItem("3", "Coaching", "James Gosling", R.drawable.healthy_book),
+        BookItem("4", "Losing the Plot", "Annaleise Byrd", R.drawable.losing_the_plot_book),
+        BookItem("5", "7 Habits", "Stephen Covey", R.drawable.habits_book),
+        BookItem("6", "Java Programming", "James Gosling", R.drawable.java_book),
+        BookItem("7", "Executive Coaching", "Nadine Greiner", R.drawable.coaching_book)
     )
 }
