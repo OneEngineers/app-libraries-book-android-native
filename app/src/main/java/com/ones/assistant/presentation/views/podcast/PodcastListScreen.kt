@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ones.assistant.R
 import com.ones.assistant.presentation.views.Routes
-gi
+
 
 @Composable
 fun PodcastScreen(navController: NavController) {
