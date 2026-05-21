@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,22 +23,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ones.assistant.R
+import com.ones.assistant.presentation.views.feature.PodcastItem
+import com.ones.assistant.presentation.views.feature.WishListViewModel
 
 @Composable
 fun PodcastDetailScreen(
-    onBackClick: () -> Unit = {}
+    podcastId: String,
+    onBackClick: () -> Unit = {},
+    wishListViewModel: WishListViewModel = viewModel()
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFEDE7F6))
-    ) {
+    // Example podcast object (normally you’d fetch by ID)
+    val podcast = PodcastItem(
+        id = podcastId,
+        title = "15 Minute English",
+        author = "Podcast Host",
+        imageRes = R.drawable.dear_to_lead
+    )
 
-        // Top Bar
+    Column {
+        // TOP BAR
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -48,63 +54,49 @@ fun PodcastDetailScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
-                text = "PODCASTS",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            Text("Podcast: ${podcast.title}", fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.weight(1f))
 
             Icon(
                 imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite"
+                contentDescription = "Favorite",
+                modifier = Modifier.clickable {
+                    wishListViewModel.addFavorite(podcast)
+                }
             )
         }
 
-        // Podcast Info
+        // PODCAST INFO
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Card(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.size(180.dp),
                 elevation = CardDefaults.cardElevation(6.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.dear_to_lead),
-                    contentDescription = "Podcast",
+                    painter = painterResource(id = podcast.imageRes),
+                    contentDescription = "Podcast Image",
+                    modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "15 Minute English",
-                fontWeight = FontWeight.Medium
-            )
-
-            Text(
-                text = "The podcast discussion",
-                color = Color.Magenta,
-                fontSize = 12.sp
-            )
+            Text(podcast.title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("by ${podcast.author}", color = Color.Magenta, fontSize = 13.sp)
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = { },
+                onClick = { /* TODO: play podcast */ },
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFB000F5)
-                ),
-                modifier = Modifier
-                    .width(160.dp)
-                    .height(48.dp)
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB000F5)),
+                modifier = Modifier.width(160.dp).height(48.dp)
             ) {
                 Text("Play", color = Color.White)
             }
@@ -112,7 +104,7 @@ fun PodcastDetailScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "IELTS grammar requires a blend of accuracy and range...",
+                text = "IELTS grammar requires a blend of accuracy and range, focusing on using simple and complex sentences.",
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 24.dp)
@@ -121,24 +113,16 @@ fun PodcastDetailScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Episodes Section
+        // EPISODES SECTION
         Surface(
             modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             color = Color(0xFFD1C4E9)
         ) {
-
             Column(modifier = Modifier.padding(16.dp)) {
-
-                Text(
-                    text = "Episodes",
-                    fontWeight = FontWeight.SemiBold
-                )
-
+                Text("Episodes", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(12.dp))
-
                 Divider()
-
                 Spacer(modifier = Modifier.height(12.dp))
 
                 LazyColumn {
@@ -154,14 +138,11 @@ fun PodcastDetailScreen(
 @Composable
 fun EpisodeItem() {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
-
         Text(
             text = "IELTS grammar requires a blend of accuracy and range, focusing on using simple and complex sentences.",
             fontSize = 13.sp
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         Divider()
     }
 }

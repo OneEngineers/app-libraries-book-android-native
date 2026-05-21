@@ -17,6 +17,7 @@ object Routes {
     const val BorrowedBooksScreen = "borrowed_books_screen"
     const val WishlistScreen = "wishlist_screen"
     const val NotificationsScreen = "notifications_screen"
+    const val WishListScreen = "wishlist_screen"
 
     // Navigation
     const val MyAppNavigation = "my_app_navigation"

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.3"
+agp = "8.10.1"
 apolloRuntime = "4.3.2"
 composeBom = "2025.07.00"
 converterGson = "2.9.0"

@@ -36,7 +36,7 @@ class BookDetailsViewModel @Inject constructor(
                 result.fold(
                     onSuccess = { bookDomain ->
                         Log.d("BookDetailsViewModel", "Domain data received: $bookDomain")
-                        
+
                         val book = BookDetails(
                             id = bookDomain.documentId,
                             title = bookDomain.title,
