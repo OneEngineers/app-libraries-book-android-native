@@ -46,7 +46,9 @@ fun PodcastScreen(navController: NavController) {
                 PodcastCard(
                     podcast = podcast,
                     onClick = {
-                        navController.navigate(Routes.PodcastDetailScreen)
+                        navController.navigate(
+                            "${Routes.PodcastDetailScreen}/${podcast.title}"
+                        )
                     }
                 )
             }

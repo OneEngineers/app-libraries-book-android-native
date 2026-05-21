@@ -54,9 +54,9 @@ fun SearchScreen(
     val categories = listOf("All", "Fiction", "Non-Fiction", "Science", "History", "Biography")
     val recentSearches = listOf("Android Development", "Machine Learning", "History of Art", "Python Programming")
     val popularBooks = listOf(
-        BookItem("The Great Gatsby", "F. Scott Fitzgerald", "Fiction", R.drawable.book_cover),
-        BookItem("To Kill a Mockingbird", "Harper Lee", "Fiction", R.drawable.book_cover),
-        BookItem("1984", "George Orwell", "Fiction", R.drawable.book_cover),
+        BookItem("The Octopus", "Frank Norris", "Fiction", R.drawable.a1),
+        BookItem("Gods Comics", "Kat Cho", "Fiction", R.drawable.a2),
+        BookItem("When You're Brave Enough", "Rebecca Bendheim", "Fiction", R.drawable.a3),
         BookItem("Pride and Prejudice", "Jane Austen", "Fiction", R.drawable.book_cover)
     )
     
