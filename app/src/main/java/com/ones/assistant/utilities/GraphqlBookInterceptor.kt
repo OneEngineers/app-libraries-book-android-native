@@ -15,7 +15,7 @@ class PodcastAuthInterceptor(private val token: String): Interceptor{
         return chain.proceed(newRequest)
     }
 }
-const val graphql_token = "c7c913a53356c3ac2260098cdfe607c889542cdd0f205788b0bf4da5812070e03358b1f63d403418d2dffb7ae706f1da9c332f2dd2274d95179a1341b5e7724466055d12e751b5f74f5c32770985202644469bb7a7c6f49c4039ffedbf3ec900254dbf632e717e4933ab17fcc81e05ee4d9fabaeb724c0ccb483acf5bb66b7ef"
+const val graphql_token = "a97170d27afc45687a5fa7980bdb706f2175c2093ecc0ca17c98f81a8c318848590bc59f24def0b482ea24d76039b352e3965486db5d6bc467f49050f1d58dddc8ed74f7aa50cd0b9817463c8557686626fb0f454aa8ee1c262cafd503165e7d0e012d1d00d8a210c15f2d82aa050a988dcfb8736fecdb9294790ba05e3810f5"
 val okHttpClient = OkHttpClient.Builder()
     .addInterceptor(PodcastAuthInterceptor(graphql_token))
     .build()
