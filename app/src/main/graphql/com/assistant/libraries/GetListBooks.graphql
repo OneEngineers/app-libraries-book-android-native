@@ -1,0 +1,11 @@
+query BookLocals {
+    bookLocals {
+        categories {
+            title
+        }
+        title
+        book_cover {
+            url
+        }
+    }
+}

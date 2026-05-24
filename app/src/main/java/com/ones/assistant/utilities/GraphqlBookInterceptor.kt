@@ -21,6 +21,6 @@ val okHttpClient = OkHttpClient.Builder()
     .build()
 
 val apolloClientBook = ApolloClient.Builder()
-    .serverUrl("https://book-lms.itedev.online/graphql")
+    .serverUrl("https://book-lms.domrey.online/graphql")
     .okHttpClient(okHttpClient)
     .build()
