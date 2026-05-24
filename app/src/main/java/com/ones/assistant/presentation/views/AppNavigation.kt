@@ -273,14 +273,10 @@ fun MyAppNavigation() {
                 backStackEntry.arguments?.getString("podcastId") ?: ""
 
             PodcastDetailScreen(
-
                 podcastId = podcastId,
-
                 onBackClick = {
                     navController.popBackStack()
-                },
-
-                wishListViewModel = wishListViewModel
+                }
             )
         }
     }

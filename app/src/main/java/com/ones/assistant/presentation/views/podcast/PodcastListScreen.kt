@@ -156,6 +156,7 @@ data class PodcastItem(
 
 fun getPodcasts(): List<PodcastItem> {
     return listOf(
+        PodcastItem("Chhaya Talk", "Education", R.drawable.dear_to_lead),
         PodcastItem("The 7 Habits Highly Effective People", "Stephen Covey", R.drawable.dear_to_lead),
         PodcastItem("Losing the Plot", "Annaleise Byrd", R.drawable.for_the_record),
         PodcastItem("The Only Skill that Matters", "Jonathan Levi", R.drawable.the321),
