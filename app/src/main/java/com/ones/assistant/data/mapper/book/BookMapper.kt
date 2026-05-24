@@ -21,7 +21,8 @@ class BookMapper @Inject constructor() {
             language = graphqlBook.language?.name ?: "",
             book_cover = BookCover(url = graphqlBook.book_cover?.url ?: ""),
             publisher = Publisher(publisher_name = graphqlBook.publisher?.publisher_name ?: ""),
-            categories = graphqlBook.categories?.map { Category(title = it?.title ?: "") } ?: emptyList()
+            categories = graphqlBook.categories?.map { Category(title = it?.title ?: "") } ?: emptyList(),
+            pdfUrl = ""
         )
     }
 
@@ -36,7 +37,8 @@ class BookMapper @Inject constructor() {
             language = graphqlBook.language?.name ?: "",
             book_cover = BookCover(url = graphqlBook.book_cover?.url ?: ""),
             publisher = Publisher(publisher_name = graphqlBook.publisher?.publisher_name ?: ""),
-            categories = graphqlBook.categories?.map { Category(title = it?.title ?: "") } ?: emptyList()
+            categories = graphqlBook.categories?.map { Category(title = it?.title ?: "") } ?: emptyList(),
+            pdfUrl = graphqlBook.pdf?.url ?: ""
         )
     }
 

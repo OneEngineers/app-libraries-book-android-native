@@ -52,6 +52,7 @@ class BookDetailsViewModel @Inject constructor(
                             totalRatings = 0,
                             availableCopies = 0,
                             totalCopies = 0,
+                            pdfUrl = bookDomain.pdfUrl,
                         )
 
                         Log.d("BookDetailsViewModel", "Mapped book details: $book")

@@ -26,7 +26,10 @@ object Routes {
     const val MovieScreen = "movie"
     const val PodcastDetailScreen = "podcast_detail_screen"
     const val BookDetailsScreen = "book_details"
+    const val BookReaderScreen = "book_reader"
     fun bookDetails(id: String) = "$BookDetailsScreen/$id"
+    fun bookReader(title: String, pdfUrl: String) =
+        "$BookReaderScreen/${android.net.Uri.encode(title)}/${android.net.Uri.encode(pdfUrl)}"
 }
 
 

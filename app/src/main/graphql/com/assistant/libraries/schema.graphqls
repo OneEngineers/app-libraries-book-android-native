@@ -571,6 +571,7 @@ type BookLocal {
     ISBN: String
     language: ENUM_BOOKLOCAL_LANGUAGE
     release: Date
+    pdf: UploadFile
     createdAt: DateTime
     updatedAt: DateTime
     publishedAt: DateTime

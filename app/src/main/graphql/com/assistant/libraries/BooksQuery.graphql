@@ -16,5 +16,8 @@ query BookLocal($documentId: ID!) {
         }
         release
         documentId
+        pdf {
+            url
+        }
     }
 }

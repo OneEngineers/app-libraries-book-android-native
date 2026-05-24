@@ -22,5 +22,6 @@ data class BooksDomainModel(
     val language: String,
     val book_cover: BookCover,
     val publisher: Publisher,
-    val categories: List<Category>
+    val categories: List<Category>,
+    val pdfUrl: String = ""
 )

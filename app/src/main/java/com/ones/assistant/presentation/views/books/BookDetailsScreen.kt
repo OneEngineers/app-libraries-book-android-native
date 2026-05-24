@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,6 +34,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,17 +53,20 @@ import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
 fun BookDetailsScreen(
     bookId: String,
     onBackClick: () -> Unit,
-    onBorrowClick: () -> Unit,
+    onReadClick: (title: String, pdfUrl: String) -> Unit,
     onWishlistClick: () -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(bookId) {
         viewModel.loadBookDetail(bookId)
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Book Details") },
@@ -137,7 +145,15 @@ fun BookDetailsScreen(
                     language = book.language,
                     pages = book.pages.toString(),
                     publishedYear = book.publishedYear,
-                    onBorrowClick = onBorrowClick,
+                    onReadClick = {
+                        if (book.pdfUrl.isBlank()) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar("PDF is not available for this book")
+                            }
+                        } else {
+                            onReadClick(book.title, book.pdfUrl)
+                        }
+                    },
                     onWishlistClick = onWishlistClick
                 )
             }
@@ -159,7 +175,7 @@ private fun BookDetailsContent(
     language: String,
     pages: String,
     publishedYear: String,
-    onBorrowClick: () -> Unit,
+    onReadClick: () -> Unit,
     onWishlistClick: () -> Unit
 ) {
     Column(
@@ -247,7 +263,7 @@ private fun BookDetailsContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Button(
-                onClick = onBorrowClick,
+                onClick = onReadClick,
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Read")

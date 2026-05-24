@@ -14,5 +14,6 @@ data class BookDetails(
     val totalRatings: Int,
     val availableCopies: Int,
     val totalCopies: Int,
-    val coverUrl: String = ""
+    val coverUrl: String = "",
+    val pdfUrl: String = ""
 )

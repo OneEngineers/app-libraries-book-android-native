@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.ones.assistant.presentation.views.auth.LoginScreen
 import com.ones.assistant.presentation.views.auth.RegisterScreen
 import com.ones.assistant.presentation.views.books.BookDetailsScreen
+import com.ones.assistant.presentation.views.books.BookReaderScreen
 import com.ones.assistant.presentation.views.books.LibraryScreen
+import android.net.Uri
 import com.ones.assistant.presentation.views.feature.SearchScreen
 import com.ones.assistant.presentation.views.feature.WishListScreen
 import com.ones.assistant.presentation.views.feature.WishListViewModel
@@ -224,13 +226,26 @@ fun MyAppNavigation() {
                     navController.popBackStack()
                 },
 
-                onBorrowClick = {
-                    // TODO
+                onReadClick = { title, pdfUrl ->
+                    navController.navigate(Routes.bookReader(title, pdfUrl))
                 },
 
                 onWishlistClick = {
                     navController.navigate(Routes.WishListScreen)
                 }
+            )
+        }
+
+        composable(
+            "${Routes.BookReaderScreen}/{bookTitle}/{pdfUrl}"
+        ) { backStackEntry ->
+            val bookTitle = Uri.decode(backStackEntry.arguments?.getString("bookTitle") ?: "")
+            val pdfUrl = Uri.decode(backStackEntry.arguments?.getString("pdfUrl") ?: "")
+
+            BookReaderScreen(
+                bookTitle = bookTitle,
+                pdfUrl = pdfUrl,
+                onBackClick = { navController.popBackStack() }
             )
         }
 
