@@ -455,6 +455,11 @@ fun PodcastSection(
     val podcasts = listOf(
 
         PodcastItem(
+            "Chhaya Talk",
+            "Education",
+            R.drawable.dear_to_lead
+        ),
+        PodcastItem(
             "How To",
             "Every two weeks",
             R.drawable.dear_to_lead
