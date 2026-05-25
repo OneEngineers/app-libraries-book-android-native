@@ -1,0 +1,14 @@
+query Episodes {
+  episodes {
+    documentId
+    title
+    description
+    duration
+    audio {
+      url
+    }
+    thumbnail {
+      url
+    }
+  }
+}

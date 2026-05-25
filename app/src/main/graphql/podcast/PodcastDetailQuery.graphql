@@ -1,0 +1,16 @@
+query PodcastDetail($documentId: ID!) {
+  podcast(documentId: $documentId) {
+    documentId
+    name
+    description
+    image {
+      url
+    }
+    category {
+      name
+    }
+    speaker {
+      name
+    }
+  }
+}

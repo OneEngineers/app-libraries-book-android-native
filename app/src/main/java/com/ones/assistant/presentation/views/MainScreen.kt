@@ -35,7 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.R
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
+import com.ones.assistant.presentation.viewmodel.PodcastListViewModel
 import com.ones.assistant.presentation.views.books.BookDetails
+import com.ones.assistant.presentation.views.podcast.PodcastItem
 import com.ones.assistant.ui.widgets.HomeCategoryScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -63,13 +65,16 @@ fun WearOneHome(
     onPodcastClick: (String) -> Unit = {},
     onMovieClick: () -> Unit = {},
     onPodcastIconClick: () -> Unit = {},
-    booksViewModel: BooksListViewModel = hiltViewModel()
+    booksViewModel: BooksListViewModel = hiltViewModel(),
+    podcastViewModel: PodcastListViewModel = hiltViewModel()
 )  {
 
     val uiState by booksViewModel.uiState.collectAsState()
+    val podcastUiState by podcastViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         booksViewModel.loadBooks()
+        podcastViewModel.loadPodcasts()
     }
 
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -140,6 +145,7 @@ fun WearOneHome(
                 HomeScreen(
                     modifier = Modifier.padding(innerPadding),
                     books = uiState.books,
+                    podcasts = podcastUiState.podcasts,
                     onBookClick = onBookClick,
                     onLibraryClick = onLibraryClick,
                     onPodcastClick = onPodcastClick,
@@ -177,6 +183,7 @@ fun WearOneHome(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     books: List<BookDetails> = emptyList(),
+    podcasts: List<PodcastItem> = emptyList(),
     onBookClick: (String) -> Unit = {},
     onLibraryClick: () -> Unit = {},
     onPodcastClick: (String) -> Unit = {},
@@ -220,6 +227,7 @@ fun HomeScreen(
         item {
 
             PodcastSection(
+                podcasts = podcasts,
                 onPodcastClick = onPodcastClick
             )
         }
@@ -372,7 +380,7 @@ fun BookItem(
     }
 }
 
-data class PodcastItem(
+private data class LibraryHighlightItem(
     val title: String,
     val creator: String,
     val coverRes: Int
@@ -384,26 +392,22 @@ fun LibrarySection(
 ) {
 
     val books = listOf(
-
-        PodcastItem(
+        LibraryHighlightItem(
             "The Octopus",
             "Stephen Covey",
             R.drawable.a1
         ),
-
-        PodcastItem(
+        LibraryHighlightItem(
             "Losing the Plot",
             "Annaleise Byrd",
             R.drawable.losing_the_plot_book
         ),
-
-        PodcastItem(
+        LibraryHighlightItem(
             "Atomic Habits",
             "James Clear.",
             R.drawable.automatic_habits_book
         ),
-
-        PodcastItem(
+        LibraryHighlightItem(
             "Only Skill",
             "Jonathan Levi",
             R.drawable.only_skill_book
@@ -433,14 +437,9 @@ fun LibrarySection(
         LazyRow {
 
             items(books) { book ->
-
-                PodcastCard(
-
-                    podcast = book,
-
-                    onClick = {
-                        onBookClick(book.title)
-                    }
+                LibraryHighlightCard(
+                    item = book,
+                    onClick = { onBookClick(book.title) }
                 )
             }
         }
@@ -449,37 +448,10 @@ fun LibrarySection(
 
 @Composable
 fun PodcastSection(
+    podcasts: List<PodcastItem> = emptyList(),
     onPodcastClick: (String) -> Unit = {}
 ) {
-
-    val podcasts = listOf(
-
-        PodcastItem(
-            "Chhaya Talk",
-            "Education",
-            R.drawable.dear_to_lead
-        ),
-        PodcastItem(
-            "How To",
-            "Every two weeks",
-            R.drawable.dear_to_lead
-        ),
-        PodcastItem(
-            "Self-Improvement",
-            "Updated weekly",
-            R.drawable.for_the_record
-        ),
-        PodcastItem(
-            "Music Commentary",
-            "Updated 15 Jan 2026",
-            R.drawable.music
-        ),
-        PodcastItem(
-            "Buddhism",
-            "Updated 15 Feb 2026",
-            R.drawable.buddhism
-        )
-    )
+    if (podcasts.isEmpty()) return
 
     Column(
         modifier = Modifier
@@ -510,11 +482,51 @@ fun PodcastSection(
                     podcast = podcast,
 
                     onClick = {
-                        onPodcastClick(podcast.title)
+                        onPodcastClick(podcast.id)
                     }
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun LibraryHighlightCard(
+    item: LibraryHighlightItem,
+    onClick: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .width(140.dp)
+            .padding(8.dp)
+            .clickable { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = item.coverRes),
+            contentDescription = item.title,
+            modifier = Modifier
+                .width(120.dp)
+                .height(160.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = item.title,
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp,
+            maxLines = 1
+        )
+
+        Text(
+            text = item.creator,
+            fontSize = 10.sp,
+            color = Color.Gray,
+            maxLines = 1
+        )
     }
 }
 
@@ -536,14 +548,16 @@ fun PodcastCard(
     ) {
 
         Image(
-            painter = painterResource(id = podcast.coverRes),
+            painter = if (podcast.coverUrl.isNotBlank()) {
+                rememberAsyncImagePainter(model = podcast.coverUrl)
+            } else {
+                painterResource(id = R.drawable.dear_to_lead)
+            },
             contentDescription = podcast.title,
-
             modifier = Modifier
                 .width(120.dp)
                 .height(160.dp)
                 .clip(RoundedCornerShape(8.dp)),
-
             contentScale = ContentScale.Crop
         )
 
