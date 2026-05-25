@@ -104,10 +104,16 @@ kotlin {
 apollo {
     service("ones") {
         packageName.set("com.ones.assistant.graphql")
+        srcDir(file("src/main/graphql/com/assistant/libraries"))
         introspection {
             endpointUrl.set("https://book-lms.itedev.online/graphql")
             schemaFile.set(file("src/main/graphql/com/ones/assistant/schema.sdl"))
         }
+    }
+    service("podcast") {
+        packageName.set("com.ones.assistant.graphql.podcast")
+        srcDir(file("src/main/graphql/podcast"))
+        schemaFile.set(file("src/main/graphql/podcast/schema.graphqls"))
     }
 }
 
@@ -180,4 +186,7 @@ dependencies {
 
     // Coil for image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Audio playback for podcast episodes
+    implementation("androidx.media3:media3-exoplayer:1.5.1")
 }

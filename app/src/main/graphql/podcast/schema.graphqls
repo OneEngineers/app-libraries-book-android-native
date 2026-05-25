@@ -1,0 +1,39 @@
+schema {
+  query: Query
+}
+
+type Query {
+  podcasts: [Podcast]
+  podcast(documentId: ID!): Podcast
+  episodes: [Episode]
+}
+
+type Podcast {
+  documentId: ID!
+  name: String
+  description: String
+  image: UploadFile
+  speaker: Speaker
+  category: Category
+}
+
+type Category {
+  name: String
+}
+
+type Episode {
+  documentId: ID!
+  title: String!
+  description: String
+  duration: Float
+  audio: UploadFile!
+  thumbnail: UploadFile!
+}
+
+type UploadFile {
+  url: String
+}
+
+type Speaker {
+  name: String
+}

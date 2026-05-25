@@ -21,16 +21,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,61 +52,124 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.ones.assistant.R
+import com.ones.assistant.presentation.viewmodel.PodcastDetailViewModel
 
 @Composable
 fun PodcastDetailScreen(
     podcastId: String,
     onBackClick: () -> Unit = {},
-    onEpisodePlay: (PodcastEpisodeUi) -> Unit = {}
+    viewModel: PodcastDetailViewModel = hiltViewModel()
 ) {
-    val podcast = remember(podcastId) { PodcastMockData.getById(podcastId) }
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(podcastId) {
+        viewModel.loadPodcastDetail(podcastId)
+    }
+
+    LaunchedEffect(uiState.playbackError) {
+        uiState.playbackError?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            viewModel.clearPlaybackError()
+        }
+    }
 
     Scaffold(
-        containerColor = Color(0xFFF8F6F3)
+        containerColor = Color(0xFFF8F6F3),
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            item {
-                IconButton(
-                    onClick = onBackClick,
-                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+        when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
+                    CircularProgressIndicator()
+                }
+            }
+            uiState.errorMessage != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = uiState.errorMessage ?: "Failed to load podcast",
+                        color = Color.Red,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
+            uiState.podcast != null -> {
+                val podcast = uiState.podcast!!
 
-            item {
-                PodcastHeader(podcast = podcast)
-            }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                ) {
+                    item {
+                        IconButton(
+                            onClick = onBackClick,
+                            modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
 
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = "Episode",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
+                    item {
+                        PodcastHeader(podcast = podcast)
+                    }
 
-            items(podcast.episodes, key = { it.id }) { episode ->
-                EpisodeListItem(
-                    episode = episode,
-                    fallbackCoverRes = podcast.coverRes,
-                    onPlayClick = { onEpisodePlay(episode) }
-                )
-            }
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = "Episode",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
 
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
+                    if (podcast.episodes.isEmpty()) {
+                        item {
+                            Text(
+                                text = "No episodes available",
+                                fontSize = 14.sp,
+                                color = Color(0xFF8A8A8A),
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                        }
+                    } else {
+                        items(podcast.episodes, key = { it.id }) { episode ->
+                            val isThisEpisodePlaying =
+                                uiState.playingEpisodeId == episode.id && uiState.isPlaying
+
+                            EpisodeListItem(
+                                episode = episode,
+                                isPlaying = isThisEpisodePlaying,
+                                fallbackCoverRes = null,
+                                fallbackCoverUrl = podcast.coverUrl,
+                                onPlayClick = { viewModel.onEpisodeClick(episode) }
+                            )
+                        }
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                }
             }
         }
     }
@@ -186,7 +255,9 @@ private fun PodcastCoverImage(
 @Composable
 fun EpisodeListItem(
     episode: PodcastEpisodeUi,
+    isPlaying: Boolean = false,
     fallbackCoverRes: Int?,
+    fallbackCoverUrl: String = "",
     onPlayClick: () -> Unit
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -203,16 +274,25 @@ fun EpisodeListItem(
                 .size(72.dp)
                 .clip(RoundedCornerShape(10.dp))
         ) {
-            if (episode.thumbnailUrl.isNotBlank()) {
-                AsyncImage(
-                    model = episode.thumbnailUrl,
-                    contentDescription = episode.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                val thumbRes = episode.thumbnailRes ?: fallbackCoverRes
-                if (thumbRes != null) {
+            when {
+                episode.thumbnailUrl.isNotBlank() -> {
+                    AsyncImage(
+                        model = episode.thumbnailUrl,
+                        contentDescription = episode.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                fallbackCoverUrl.isNotBlank() -> {
+                    AsyncImage(
+                        model = fallbackCoverUrl,
+                        contentDescription = episode.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                else -> {
+                    val thumbRes = episode.thumbnailRes ?: fallbackCoverRes ?: R.drawable.for_the_record
                     Image(
                         painter = painterResource(id = thumbRes),
                         contentDescription = episode.title,
@@ -235,8 +315,8 @@ fun EpisodeListItem(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Play episode",
+                        imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        contentDescription = if (isPlaying) "Pause episode" else "Play episode",
                         tint = Color(0xFF7E57C2),
                         modifier = Modifier.size(22.dp)
                     )

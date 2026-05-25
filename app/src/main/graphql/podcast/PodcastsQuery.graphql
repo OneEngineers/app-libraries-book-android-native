@@ -1,0 +1,12 @@
+query Podcasts {
+  podcasts {
+    documentId
+    image {
+      url
+    }
+    name
+    speaker {
+      name
+    }
+  }
+}
