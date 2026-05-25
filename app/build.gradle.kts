@@ -115,6 +115,11 @@ apollo {
         srcDir(file("src/main/graphql/podcast"))
         schemaFile.set(file("src/main/graphql/podcast/schema.graphqls"))
     }
+    service("auth") {
+        packageName.set("com.ones.assistant.graphql.auth")
+        srcDir(file("src/main/graphql/auth"))
+        schemaFile.set(file("src/main/graphql/auth/schema.graphqls"))
+    }
 }
 
 dependencies {
