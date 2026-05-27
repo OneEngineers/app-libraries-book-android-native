@@ -1,0 +1,17 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  dummy: String
+}
+
+type Mutation {
+  register(username: String!, email: String!, password: String!): AuthResponse!
+  login(email: String!, password: String!): AuthResponse!
+}
+
+type AuthResponse {
+  token: String!
+}
