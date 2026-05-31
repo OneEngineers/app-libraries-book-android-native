@@ -213,6 +213,12 @@ fun MyAppNavigation() {
                     navController.navigate(
                         "${Routes.BookDetailsScreen}/$bookId"
                     )
+                },
+
+                onPodcastClick = { podcastId ->
+                    navController.navigate(
+                        "${Routes.PodcastDetailScreen}/$podcastId"
+                    )
                 }
             )
         }
