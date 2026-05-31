@@ -79,8 +79,8 @@ class LoginViewModel(
 }
 
 data class LoginUiState(
-    val email: String = "noch@gmail.com",
-    val password: String = "noch@123",
+    val email: String = "",
+    val password: String = "",
     val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val isLoginSuccessful: Boolean = false,
