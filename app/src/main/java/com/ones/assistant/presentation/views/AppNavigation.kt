@@ -152,7 +152,12 @@ fun MyAppNavigation() {
 
             WishListScreen(
                 navController = navController,
-                wishListViewModel = wishListViewModel
+                wishListViewModel = wishListViewModel,
+                onBookClick = { bookId ->
+                    navController.navigate(
+                        "${Routes.BookDetailsScreen}/$bookId"
+                    )
+                }
             )
         }
 
@@ -224,7 +229,6 @@ fun MyAppNavigation() {
             BookDetailsScreen(
 
                 bookId = bookId,
-
                 onBackClick = {
                     navController.popBackStack()
                 },

@@ -23,12 +23,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.ones.assistant.presentation.views.Routes
 
 @Composable
 fun WishListScreen(
     navController: NavController? = null,
     wishListViewModel: WishListViewModel = viewModel(),
-    showTopBar: Boolean = true
+    showTopBar: Boolean = true,
+    onBookClick: (String) -> Unit = {}
+//    navController: NavController? = null,
+//    wishListViewModel: WishListViewModel = viewModel(),
+//    showTopBar: Boolean = true
 ) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))
@@ -50,17 +55,33 @@ fun WishListScreen(
         // LIST OF FAVORITES
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             items(wishListViewModel.favorites) { item: WishlistItem ->
-                WishListCard(item)
+                WishListCard(
+                    item = item,
+                    onClick = {
+                        if (item is WishlistItem.Book) {
+                            onBookClick(item.id)
+                        }
+//                        if (item is WishlistItem.Book) {
+//                            navController?.navigate("bookDetail/${item.id}")
+//                        }
+//                        else if (item is WishlistItem.Podcast) {
+//                            navController?.navigate("podcastDetail/${item.id}")
+//                        }
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun WishListCard(item: WishlistItem) {
+fun WishListCard(item: WishlistItem,
+                 onClick: () -> Unit
+                 ) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
-        shape = RoundedCornerShape(18.dp)
+        shape = RoundedCornerShape(18.dp),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.background(Color(0xFFE8DFF0)).padding(16.dp)
