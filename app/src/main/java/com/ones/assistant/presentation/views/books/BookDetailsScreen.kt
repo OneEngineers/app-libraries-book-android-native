@@ -54,7 +54,7 @@ fun BookDetailsScreen(
     bookId: String,
     onBackClick: () -> Unit,
     onReadClick: (title: String, pdfUrl: String) -> Unit,
-    onWishlistClick: () -> Unit,
+    onWishlistClick: (BookDetails) -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -154,7 +154,7 @@ fun BookDetailsScreen(
                             onReadClick(book.title, book.pdfUrl)
                         }
                     },
-                    onWishlistClick = onWishlistClick
+                    onWishlistClick = { onWishlistClick(book) }
                 )
             }
         }

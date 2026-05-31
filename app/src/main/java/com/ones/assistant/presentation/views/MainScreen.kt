@@ -32,12 +32,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.R
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
 import com.ones.assistant.presentation.viewmodel.PodcastListViewModel
 import com.ones.assistant.presentation.views.books.BookDetails
 import com.ones.assistant.presentation.views.podcast.PodcastItem
+import com.ones.assistant.presentation.views.feature.WishListScreen
+import com.ones.assistant.presentation.views.feature.WishListViewModel
 import com.ones.assistant.ui.widgets.HomeCategoryScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -66,7 +69,8 @@ fun WearOneHome(
     onMovieClick: () -> Unit = {},
     onPodcastIconClick: () -> Unit = {},
     booksViewModel: BooksListViewModel = hiltViewModel(),
-    podcastViewModel: PodcastListViewModel = hiltViewModel()
+    podcastViewModel: PodcastListViewModel = hiltViewModel(),
+    wishListViewModel: WishListViewModel = viewModel()
 )  {
 
     val uiState by booksViewModel.uiState.collectAsState()
@@ -155,13 +159,16 @@ fun WearOneHome(
             }
 
             1 -> {
-
                 Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 ) {
-
-                    Text("Activity Screen")
+                    WishListScreen(
+                        navController = null,
+                        wishListViewModel = wishListViewModel,
+                        showTopBar = false
+                    )
                 }
             }
 

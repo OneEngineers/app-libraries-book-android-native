@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ones.assistant.presentation.views.auth.LoginScreen
 import com.ones.assistant.presentation.views.auth.RegisterScreen
+import com.ones.assistant.presentation.views.books.BookDetails
 import com.ones.assistant.presentation.views.books.BookDetailsScreen
 import com.ones.assistant.presentation.views.books.BookReaderScreen
 import com.ones.assistant.presentation.views.books.LibraryScreen
@@ -15,6 +16,7 @@ import android.net.Uri
 import com.ones.assistant.presentation.views.feature.SearchScreen
 import com.ones.assistant.presentation.views.feature.WishListScreen
 import com.ones.assistant.presentation.views.feature.WishListViewModel
+import com.ones.assistant.presentation.views.feature.WishlistItem
 import com.ones.assistant.presentation.views.home.HomeScreen
 import com.ones.assistant.presentation.views.podcast.PodcastDetailScreen
 import com.ones.assistant.presentation.views.podcast.PodcastScreen
@@ -103,6 +105,7 @@ fun MyAppNavigation() {
             WearOneHome(
 
                 booksViewModel = hiltViewModel(),
+                wishListViewModel = wishListViewModel,
 
                 onProfileClick = {
                     navController.navigate(Routes.ProfileScreen)
@@ -230,7 +233,15 @@ fun MyAppNavigation() {
                     navController.navigate(Routes.bookReader(title, pdfUrl))
                 },
 
-                onWishlistClick = {
+                onWishlistClick = { book ->
+                    wishListViewModel.addFavorite(
+                        WishlistItem.Book(
+                            id = book.id,
+                            title = book.title,
+                            author = book.author,
+                            coverUrl = book.coverUrl
+                        )
+                    )
                     navController.navigate(Routes.WishListScreen)
                 }
             )

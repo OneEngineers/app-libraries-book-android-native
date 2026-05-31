@@ -3,24 +3,37 @@ package com.ones.assistant.presentation.views.feature
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
-data class PodcastItem(
-    val id: String,
-    val title: String,
-    val author: String,
-    val imageRes: Int
-)
+sealed class WishlistItem {
+    abstract val id: String
+    abstract val title: String
+    abstract val author: String
+
+    data class Podcast(
+        override val id: String,
+        override val title: String,
+        override val author: String,
+        val imageRes: Int
+    ) : WishlistItem()
+
+    data class Book(
+        override val id: String,
+        override val title: String,
+        override val author: String,
+        val coverUrl: String
+    ) : WishlistItem()
+}
 
 class WishListViewModel : ViewModel() {
-    private val _favorites = mutableStateListOf<PodcastItem>()
-    val favorites: List<PodcastItem> get() = _favorites
+    private val _favorites = mutableStateListOf<WishlistItem>()
+    val favorites: List<WishlistItem> get() = _favorites
 
-    fun addFavorite(podcast: PodcastItem) {
-        if (_favorites.none { it.id == podcast.id }) {
-            _favorites.add(podcast)
+    fun addFavorite(item: WishlistItem) {
+        if (_favorites.none { it.id == item.id }) {
+            _favorites.add(item)
         }
     }
 
-    fun removeFavorite(podcastId: String) {
-        _favorites.removeAll { it.id == podcastId }
+    fun removeFavorite(itemId: String) {
+        _favorites.removeAll { it.id == itemId }
     }
 }

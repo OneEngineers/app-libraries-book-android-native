@@ -22,38 +22,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun WishListScreen(
-    navController: NavController,
-    wishListViewModel: WishListViewModel = viewModel()
+    navController: NavController? = null,
+    wishListViewModel: WishListViewModel = viewModel(),
+    showTopBar: Boolean = true
 ) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))
     ) {
         // TOP BAR
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+        if (showTopBar) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { navController?.popBackStack() }) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
+                Spacer(modifier = Modifier.width(70.dp))
+                Text("My WishList", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
             }
-            Spacer(modifier = Modifier.width(70.dp))
-            Text("My WishList", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
         }
 
         // LIST OF FAVORITES
         LazyColumn(modifier = Modifier.padding(16.dp)) {
-            items(wishListViewModel.favorites) { podcast: PodcastItem ->
-                WishListCard(podcast)
+            items(wishListViewModel.favorites) { item: WishlistItem ->
+                WishListCard(item)
             }
         }
     }
 }
 
 @Composable
-fun WishListCard(podcast: PodcastItem) {
+fun WishListCard(item: WishlistItem) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         shape = RoundedCornerShape(18.dp)
@@ -61,9 +65,14 @@ fun WishListCard(podcast: PodcastItem) {
         Row(
             modifier = Modifier.background(Color(0xFFE8DFF0)).padding(16.dp)
         ) {
+            val painter = when (item) {
+                is WishlistItem.Podcast -> painterResource(id = item.imageRes)
+                is WishlistItem.Book -> rememberAsyncImagePainter(model = item.coverUrl)
+            }
+
             Image(
-                painter = painterResource(id = podcast.imageRes),
-                contentDescription = podcast.title,
+                painter = painter,
+                contentDescription = item.title,
                 modifier = Modifier.width(85.dp).height(135.dp).clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -71,11 +80,15 @@ fun WishListCard(podcast: PodcastItem) {
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(podcast.title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
-                Text("by ${podcast.author}", fontSize = 16.sp, color = Color.Gray)
+                Text(item.title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+                Text("by ${item.author}", fontSize = 16.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Added to WishList", fontSize = 18.sp, color = Color.Gray)
+                    Text(
+                        text = if (item is WishlistItem.Book) "Book Added" else "Added to WishList",
+                        fontSize = 18.sp,
+                        color = Color.Gray
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = Color.Red)
                 }
