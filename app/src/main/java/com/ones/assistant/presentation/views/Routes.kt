@@ -18,6 +18,7 @@ object Routes {
     const val WishlistScreen = "wishlist_screen"
     const val NotificationsScreen = "notifications_screen"
     const val WishListScreen = "wishlist_screen"
+    const val ReadingHistoryScreen = "reading_history_screen"
 
     // Navigation
     const val MyAppNavigation = "my_app_navigation"

@@ -44,6 +44,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.viewinterop.AndroidView
+import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
@@ -53,7 +57,7 @@ import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
 fun BookDetailsScreen(
     bookId: String,
     onBackClick: () -> Unit,
-    onReadClick: (title: String, pdfUrl: String) -> Unit,
+    onReadClick: (BookDetails) -> Unit,
     onWishlistClick: (BookDetails) -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel()
 ) {
@@ -151,7 +155,7 @@ fun BookDetailsScreen(
                                 snackbarHostState.showSnackbar("PDF is not available for this book")
                             }
                         } else {
-                            onReadClick(book.title, book.pdfUrl)
+                            onReadClick(book)
                         }
                     },
                     onWishlistClick = { onWishlistClick(book) }
@@ -298,10 +302,17 @@ private fun BookDetailsContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = description,
-                    fontSize = 13.sp,
-                    color = Color.DarkGray
+                AndroidView(
+                    modifier = Modifier.fillMaxWidth(),
+                    factory = { context ->
+                        TextView(context).apply {
+                            textSize = 13f
+                            setTextColor(Color.DarkGray.toArgb())
+                        }
+                    },
+                    update = { textView ->
+                        textView.text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                    }
                 )
             }
         }

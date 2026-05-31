@@ -167,7 +167,9 @@ fun WearOneHome(
                     WishListScreen(
                         navController = null,
                         wishListViewModel = wishListViewModel,
-                        showTopBar = false
+                        showTopBar = false,
+                        onBookClick = onBookClick,
+                        onPodcastClick = onPodcastClick
                     )
                 }
             }
