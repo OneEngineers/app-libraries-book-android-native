@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +35,13 @@ import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.R
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
 import com.ones.assistant.presentation.views.Routes
+import androidx.compose.runtime.*
+import com.ones.assistant.presentation.views.BookSection
+import com.ones.assistant.presentation.views.podcast.TopBar
+// ADDED
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 
 @Composable
 fun LibraryScreen(
@@ -41,6 +50,7 @@ fun LibraryScreen(
 ) {
 
     val uiState by booksListViewModel.uiState.collectAsState()
+    var showAllBooks by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         booksListViewModel.loadBooks()
@@ -92,12 +102,61 @@ fun LibraryScreen(
             }
             else -> {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
+
                     item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+                            Text(
+                                text = "Library",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = if (showAllBooks) "Show less <<" else "See all >>",
+                                fontSize = 12.sp,
+                                color = Color.Gray,
+                                modifier = Modifier.clickable {
+                                    showAllBooks = !showAllBooks
+
+                                }
+                            )
+                        }
                         BookSection(
-                            title = "Library",
+                            title = "",
                             books = uiState.books,
                             navController = navController
                         )
+                        if (showAllBooks) {
+
+                            // ADDED: show books in grid (3 columns)
+                            LazyVerticalGrid(
+                                columns = androidx.compose.foundation.lazy.grid.GridCells.Fixed(3),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(600.dp),
+                                contentPadding = PaddingValues(8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+
+                                items(uiState.books) { book ->
+
+                                    BookHorizontalCard(
+                                        book = book,
+                                        onClick = {
+                                            navController.navigate(
+                                                "${Routes.BookDetailsScreen}/${book.id}"
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     item {
@@ -208,9 +267,9 @@ fun BookHorizontalCard(
         Text(
             text = book.title,
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             color = Color.Black,
-            modifier = Modifier.padding(horizontal = 4.dp)
+            modifier = Modifier.padding(horizontal = 3.dp)
         )
 
         Text(
@@ -233,3 +292,4 @@ fun BookHorizontalCard(
         }
     }
 }
+

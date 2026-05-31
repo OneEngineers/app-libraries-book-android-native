@@ -121,15 +121,15 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             // Phone field
-            OutlinedTextField(
-                value = uiState.phoneNumber,
-                onValueChange = viewModel::onPhoneChange,
-                label = { Text("Phone Number (Optional)") },
-                modifier = Modifier.fillMaxWidth(),
-                isError = uiState.errorMessage != null
-            )
+//            OutlinedTextField(
+//                value = uiState.phoneNumber,
+//                onValueChange = viewModel::onPhoneChange,
+//                label = { Text("Phone Number (Optional)") },
+//                modifier = Modifier.fillMaxWidth(),
+//                isError = uiState.errorMessage != null
+//            )
 
-            Spacer(modifier = Modifier.height(12.dp))
+           // Spacer(modifier = Modifier.height(12.dp))
 
             // Password field
             OutlinedTextField(
