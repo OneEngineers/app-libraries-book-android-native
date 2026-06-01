@@ -3,13 +3,29 @@ schema {
   mutation: Mutation
 }
 
+scalar Upload
+
 type Query {
   dummy: String
+  getProfileUser(id: ID!): UserProfile
+}
+
+type UserProfile {
+  id: ID!
+  username: String!
+  imageProfile: String
+  displayName: String!
 }
 
 type Mutation {
   register(username: String!, email: String!, password: String!): AuthResponse!
   login(email: String!, password: String!): AuthResponse!
+  updateProfile(displayName: String, imageProfile: String): UserProfile
+  uploadFile(file: Upload!): FileResponse!
+}
+
+type FileResponse {
+  url: String!
 }
 
 type AuthResponse {

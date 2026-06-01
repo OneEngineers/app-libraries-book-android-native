@@ -30,8 +30,10 @@ fun WishListScreen(
     navController: NavController? = null,
     wishListViewModel: WishListViewModel = viewModel(),
     showTopBar: Boolean = true,
-    onBookClick: (String) -> Unit = {},
-    onPodcastClick: (String) -> Unit = {}
+    onBookClick: (String) -> Unit = {}
+//    navController: NavController? = null,
+//    wishListViewModel: WishListViewModel = viewModel(),
+//    showTopBar: Boolean = true
 ) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))
@@ -56,10 +58,15 @@ fun WishListScreen(
                 WishListCard(
                     item = item,
                     onClick = {
-                        when (item) {
-                            is WishlistItem.Book -> onBookClick(item.id)
-                            is WishlistItem.Podcast -> onPodcastClick(item.id)
+                        if (item is WishlistItem.Book) {
+                            onBookClick(item.id)
                         }
+//                        if (item is WishlistItem.Book) {
+//                            navController?.navigate("bookDetail/${item.id}")
+//                        }
+//                        else if (item is WishlistItem.Podcast) {
+//                            navController?.navigate("podcastDetail/${item.id}")
+//                        }
                     }
                 )
             }

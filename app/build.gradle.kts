@@ -119,6 +119,7 @@ apollo {
         packageName.set("com.ones.assistant.graphql.auth")
         srcDir(file("src/main/graphql/auth"))
         schemaFile.set(file("src/main/graphql/auth/schema.graphqls"))
+        mapScalar("Upload", "com.apollographql.apollo.api.DefaultUpload")
     }
 }
 

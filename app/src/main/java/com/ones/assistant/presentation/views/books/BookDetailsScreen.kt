@@ -57,7 +57,7 @@ import com.ones.assistant.presentation.viewmodel.BookDetailsViewModel
 fun BookDetailsScreen(
     bookId: String,
     onBackClick: () -> Unit,
-    onReadClick: (BookDetails) -> Unit,
+    onReadClick: (title: String, pdfUrl: String) -> Unit,
     onWishlistClick: (BookDetails) -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel()
 ) {
@@ -155,7 +155,7 @@ fun BookDetailsScreen(
                                 snackbarHostState.showSnackbar("PDF is not available for this book")
                             }
                         } else {
-                            onReadClick(book)
+                            onReadClick(book.title, book.pdfUrl)
                         }
                     },
                     onWishlistClick = { onWishlistClick(book) }

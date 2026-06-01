@@ -13,8 +13,6 @@ import com.ones.assistant.presentation.views.books.BookDetailsScreen
 import com.ones.assistant.presentation.views.books.BookReaderScreen
 import com.ones.assistant.presentation.views.books.LibraryScreen
 import android.net.Uri
-import com.ones.assistant.presentation.viewmodel.ReadingHistoryViewModel
-import com.ones.assistant.presentation.views.feature.ReadingHistoryScreen
 import com.ones.assistant.presentation.views.feature.SearchScreen
 import com.ones.assistant.presentation.views.feature.WishListScreen
 import com.ones.assistant.presentation.views.feature.WishListViewModel
@@ -31,7 +29,6 @@ fun MyAppNavigation() {
     val navController = rememberNavController()
 
     val wishListViewModel: WishListViewModel = viewModel()
-    val readingHistoryViewModel: ReadingHistoryViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -160,11 +157,6 @@ fun MyAppNavigation() {
                     navController.navigate(
                         "${Routes.BookDetailsScreen}/$bookId"
                     )
-                },
-                onPodcastClick = { podcastId ->
-                    navController.navigate(
-                        "${Routes.PodcastDetailScreen}/$podcastId"
-                    )
                 }
             )
         }
@@ -180,7 +172,7 @@ fun MyAppNavigation() {
                 },
 
                 onLogoutClick = {
-                    com.ones.assistant.utilities.UserStateManager.clearUser()
+
                     navController.navigate(Routes.HomeScreen) {
 
                         popUpTo(Routes.HomeScreen) {
@@ -191,10 +183,6 @@ fun MyAppNavigation() {
 
                 onSettingsClick = {
                     navController.navigate(Routes.SettingsScreen)
-                },
-
-                onHistoryClick = {
-                    navController.navigate(Routes.ReadingHistoryScreen)
                 }
             )
         }
@@ -251,9 +239,8 @@ fun MyAppNavigation() {
                     navController.popBackStack()
                 },
 
-                onReadClick = { book ->
-                    readingHistoryViewModel.addToHistory(book)
-                    navController.navigate(Routes.bookReader(book.title, book.pdfUrl))
+                onReadClick = { title, pdfUrl ->
+                    navController.navigate(Routes.bookReader(title, pdfUrl))
                 },
 
                 onWishlistClick = { book ->
@@ -316,18 +303,6 @@ fun MyAppNavigation() {
                 podcastId = podcastId,
                 onBackClick = {
                     navController.popBackStack()
-                }
-            )
-        }
-
-        // READING HISTORY
-
-        composable(Routes.ReadingHistoryScreen) {
-            ReadingHistoryScreen(
-                viewModel = readingHistoryViewModel,
-                onBackClick = { navController.popBackStack() },
-                onBookClick = { bookId ->
-                    navController.navigate("${Routes.BookDetailsScreen}/$bookId")
                 }
             )
         }

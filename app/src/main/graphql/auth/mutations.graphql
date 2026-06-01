@@ -9,3 +9,18 @@ mutation Login($email: String!, $password: String!) {
         token
     }
 }
+
+mutation UpdateProfile($displayName: String, $imageProfile: String) {
+    updateProfile(displayName: $displayName, imageProfile: $imageProfile) {
+        id
+        username
+        displayName
+        imageProfile
+    }
+}
+
+mutation UploadFile($file: Upload!) {
+    uploadFile(file: $file) {
+        url
+    }
+}
