@@ -16,15 +16,50 @@ import com.ones.assistant.domain.usecase.podcast.GetPodcastDetailUseCase
 import com.ones.assistant.domain.usecase.podcast.GetPodcastDetailUseCaseImpl
 import com.ones.assistant.domain.usecase.podcast.GetPodcastsUseCase
 import com.ones.assistant.domain.usecase.podcast.GetPodcastsUseCaseImpl
+import android.content.Context
+import com.ones.assistant.data.repository.UserRepositoryImpl
+import com.ones.assistant.domain.repositories.user.UserRepository
+import com.ones.assistant.domain.usecase.user.UpdateProfileUseCase
+import com.ones.assistant.utilities.TokenManager
+import com.ones.assistant.utilities.createApolloClientAuth
+import com.apollographql.apollo.ApolloClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
+
+    @Provides
+    @Singleton
+    fun provideTokenManager(@ApplicationContext context: Context): TokenManager {
+        return TokenManager(context)
+    }
+
+    @Provides
+    @Singleton
+    @Named("AuthClient")
+    fun provideApolloClientAuth(tokenManager: TokenManager): ApolloClient {
+        return createApolloClientAuth(tokenManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        @Named("AuthClient") apolloClient: ApolloClient
+    ): UserRepository {
+        return UserRepositoryImpl(apolloClient)
+    }
+
+    @Provides
+    fun provideUpdateProfileUseCase(userRepository: UserRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(userRepository)
+    }
 
     @Provides
     @Singleton

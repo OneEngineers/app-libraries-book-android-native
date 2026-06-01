@@ -1,0 +1,8 @@
+query GetProfileUser($id: ID!) {
+    getProfileUser(id: $id) {
+        id
+        username
+        imageProfile
+        displayName
+    }
+}
