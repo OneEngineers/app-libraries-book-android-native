@@ -35,7 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.R
+import com.ones.assistant.presentation.components.ProfileAvatar
 import com.ones.assistant.presentation.viewmodel.BooksListViewModel
+import com.ones.assistant.utilities.UserStateManager
 import com.ones.assistant.presentation.viewmodel.PodcastListViewModel
 import com.ones.assistant.presentation.views.books.BookDetails
 import com.ones.assistant.presentation.views.podcast.PodcastItem
@@ -75,6 +77,7 @@ fun WearOneHome(
 
     val uiState by booksViewModel.uiState.collectAsState()
     val podcastUiState by podcastViewModel.uiState.collectAsState()
+    val currentUser by UserStateManager.currentUser.collectAsState()
 
     LaunchedEffect(Unit) {
         booksViewModel.loadBooks()
@@ -122,10 +125,9 @@ fun WearOneHome(
                     }
 
                     IconButton(onClick = onProfileClick) {
-
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "Profile"
+                        ProfileAvatar(
+                            profileImageUrl = currentUser?.profileImageUrl,
+                            size = 32.dp
                         )
                     }
                 }

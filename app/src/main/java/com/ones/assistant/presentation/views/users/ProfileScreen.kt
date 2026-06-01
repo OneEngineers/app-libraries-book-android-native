@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ones.assistant.R
+import com.ones.assistant.presentation.components.resolveProfileImageModel
 import com.ones.assistant.presentation.viewmodel.ProfileViewModel
 import com.ones.assistant.utilities.uriToBase64
 
@@ -228,29 +229,29 @@ private fun ProfileContent(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Profile Image
                 val model = remember(user.profileImageUrl) {
-                    val v = user.profileImageUrl
-                    when {
-                        v.isNullOrBlank() -> null
-                        v.startsWith("http", ignoreCase = true) -> v
-                        v.startsWith("data:image", ignoreCase = true) -> v
-                        else -> "data:image/*;base64,$v"
-                    }
+                    resolveProfileImageModel(user.profileImageUrl)
                 }
 
-                val painter = rememberAsyncImagePainter(
-                    model = model ?: R.drawable.logo_app
-                )
-
-                Image(
-                    painter = painter,
-                    contentDescription = "Profile Picture",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                )
+                if (model == null) {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_app),
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Image(
+                        painter = rememberAsyncImagePainter(model = model),
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                    )
+                }
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
