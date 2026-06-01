@@ -50,7 +50,6 @@ class LoginViewModel(
             
             _uiState.value = when (result) {
                 is AuthResult.Success -> {
-                    com.ones.assistant.utilities.UserStateManager.setUser(result.authResponse.user)
                     _uiState.value.copy(
                         isLoading = false,
                         isLoginSuccessful = true,
