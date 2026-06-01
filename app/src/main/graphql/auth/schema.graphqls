@@ -10,8 +10,16 @@ type Query {
 type Mutation {
   register(username: String!, email: String!, password: String!): AuthResponse!
   login(email: String!, password: String!): AuthResponse!
+  updateProfile(displayName: String, imageProfile: String): User!
 }
 
 type AuthResponse {
   token: String!
+}
+
+type User {
+  id: ID!
+  username: String!
+  imageProfile: String
+  displayName: String
 }

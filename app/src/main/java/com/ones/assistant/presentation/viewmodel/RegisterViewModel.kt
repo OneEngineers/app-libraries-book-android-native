@@ -88,6 +88,7 @@ class RegisterViewModel(
             _uiState.value = when (result) {
                 is AuthResult.Success -> {
                     com.ones.assistant.utilities.UserStateManager.setUser(result.authResponse.user)
+                    com.ones.assistant.utilities.UserStateManager.setToken(result.authResponse.token)
                     _uiState.value.copy(
                         isLoading = false,
                         isRegistrationSuccessful = true,

@@ -7,7 +7,10 @@ import com.ones.assistant.data.model.LoginRequest
 import com.ones.assistant.data.model.RegisterRequest
 import com.ones.assistant.graphql.auth.LoginMutation
 import com.ones.assistant.graphql.auth.RegisterMutation
+import com.ones.assistant.graphql.auth.UpdateProfileMutation
+import com.ones.assistant.utilities.UserStateManager
 import com.ones.assistant.utilities.apolloClientAuth
+import com.apollographql.apollo.api.Optional
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -108,8 +111,76 @@ class AuthRepository {
             }
         }
     }
+
+    suspend fun updateProfile(
+        token: String?,
+        displayName: String?,
+        imageProfile: String?
+    ): Result<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val authToken = token?.trim()
+                if (authToken.isNullOrBlank()) {
+                    return@withContext Result.failure(Exception("Your session has expired. Please login again."))
+                }
+
+                val mutation = UpdateProfileMutation(
+                    displayName = Optional.presentIfNotNull(displayName),
+                    imageProfile = Optional.presentIfNotNull(imageProfile)
+                )
+                val response = apolloClientAuth(authToken).mutation(mutation).execute()
+
+                if (response.hasErrors()) {
+                    val firstError = response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    val isImageTooLong = firstError.contains("image", ignoreCase = true) &&
+                        firstError.contains("too long", ignoreCase = true)
+                    if (isImageTooLong && !displayName.isNullOrBlank()) {
+                        val retryMutation = UpdateProfileMutation(
+                            displayName = Optional.present(displayName),
+                            imageProfile = Optional.Absent
+                        )
+                        val retryResponse = apolloClientAuth(authToken).mutation(retryMutation).execute()
+                        if (retryResponse.hasErrors()) {
+                            Result.failure(Exception(retryResponse.errors?.firstOrNull()?.message ?: firstError))
+                        } else {
+                            val updated = retryResponse.data?.updateProfile
+                                ?: return@withContext Result.failure(Exception("No data received"))
+                            val mapped = mapUpdatedUser(updated)
+                            UserStateManager.setUser(mapped)
+                            Result.success(mapped)
+                        }
+                    } else {
+                        Result.failure(Exception(firstError))
+                    }
+                } else {
+                    val updated = response.data?.updateProfile
+                        ?: return@withContext Result.failure(Exception("No data received"))
+                    val mapped = mapUpdatedUser(updated)
+                    UserStateManager.setUser(mapped)
+                    Result.success(mapped)
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
     
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun mapUpdatedUser(updated: UpdateProfileMutation.UpdateProfile): User {
+        // Preserve fields we don't get from this endpoint (ex: email, timestamps).
+        val current = UserStateManager.getUser()
+        return User(
+            id = updated.id,
+            email = current?.email ?: "",
+            name = updated.displayName ?: updated.username,
+            phoneNumber = current?.phoneNumber,
+            profileImageUrl = updated.imageProfile,
+            isEmailVerified = current?.isEmailVerified ?: false,
+            createdAt = current?.createdAt ?: "",
+            updatedAt = current?.updatedAt ?: ""
+        )
     }
 }
